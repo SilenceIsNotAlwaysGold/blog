@@ -4,6 +4,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { User, TokenResponse } from '@/types/user'
+import * as authApi from '@/api/auth'
 
 export const useUserStore = defineStore('user', () => {
   // State
@@ -30,10 +31,17 @@ export const useUserStore = defineStore('user', () => {
     localStorage.removeItem('access_token')
   }
 
-  async function login(_username: string, _password: string): Promise<TokenResponse> {
-    // This will be implemented when auth API is ready
-    // For now, just a placeholder
-    throw new Error('Not implemented')
+  async function login(username: string, password: string): Promise<TokenResponse> {
+    const response = await authApi.login({ username, password })
+    const tokenData = response.data
+
+    // Store token
+    setToken(tokenData.access_token)
+
+    // Fetch user info
+    await fetchUserInfo()
+
+    return tokenData
   }
 
   async function logout() {
@@ -41,9 +49,17 @@ export const useUserStore = defineStore('user', () => {
   }
 
   async function fetchUserInfo(): Promise<User> {
-    // This will be implemented when auth API is ready
-    // For now, just a placeholder
-    throw new Error('Not implemented')
+    const response = await authApi.getCurrentUser()
+    const user = response.data
+
+    setUserInfo(user)
+    return user
+  }
+
+  async function refreshToken(): Promise<void> {
+    const response = await authApi.refreshToken()
+    const tokenData = response.data
+    setToken(tokenData.access_token)
   }
 
   return {
@@ -59,6 +75,7 @@ export const useUserStore = defineStore('user', () => {
     clearAuth,
     login,
     logout,
-    fetchUserInfo
+    fetchUserInfo,
+    refreshToken
   }
 })
