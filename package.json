@@ -1,0 +1,19 @@
+{
+  "name": "personal-blog",
+  "version": "1.0.0",
+  "description": "A dual-board personal blog system",
+  "scripts": {
+    "dev": "docker-compose -f docker-compose.dev.yml up -d",
+    "dev:logs": "docker-compose -f docker-compose.dev.yml logs -f",
+    "dev:stop": "docker-compose -f docker-compose.dev.yml down",
+    "dev:restart": "docker-compose -f docker-compose.dev.yml restart",
+    "prod": "docker-compose up -d",
+    "prod:logs": "docker-compose logs -f",
+    "prod:stop": "docker-compose down",
+    "prod:restart": "docker-compose restart",
+    "test": "bash run-tests.sh"
+  },
+  "keywords": ["blog", "fastapi", "vue3", "mongodb"],
+  "author": "Personal Blog System",
+  "license": "UNLICENSED"
+}

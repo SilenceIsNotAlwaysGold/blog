@@ -96,6 +96,7 @@ npm run dev
 
 ### Docker Setup
 
+**Production Mode** (optimized builds):
 ```bash
 # Build and start all services
 docker-compose up -d
@@ -103,6 +104,27 @@ docker-compose up -d
 # Stop services
 docker-compose down
 ```
+
+**Development Mode** (with hot-reload, recommended for development):
+```bash
+# Start development environment with hot-reload
+docker-compose -f docker-compose.dev.yml up -d
+
+# View logs
+docker-compose -f docker-compose.dev.yml logs -f
+
+# Stop development environment
+docker-compose -f docker-compose.dev.yml down
+```
+
+**Why use Development Mode?**
+- No container rebuild needed for code changes
+- Frontend: Vite HMR (Hot Module Replacement) for instant updates
+- Backend: Uvicorn auto-reload on file changes
+- Faster development workflow
+- See changes immediately without waiting for builds
+
+For detailed Docker documentation, see [DOCKER.md](./DOCKER.md).
 
 ## Development
 

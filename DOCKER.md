@@ -206,12 +206,132 @@ docker-compose exec frontend wget -O- http://backend:8000/health
 
 ## Development Mode
 
-```bash
-# Use docker-compose.dev.yml for development
-docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+### Quick Start for Development
 
-# Enable hot reload
-# Mount source code as volumes
+For local development with hot-reload (no container rebuild needed):
+
+```bash
+# Start development environment
+docker-compose -f docker-compose.dev.yml up -d
+
+# View logs
+docker-compose -f docker-compose.dev.yml logs -f
+
+# Stop development environment
+docker-compose -f docker-compose.dev.yml down
+```
+
+### Development vs Production
+
+| Feature | Development (docker-compose.dev.yml) | Production (docker-compose.yml) |
+|---------|--------------------------------------|----------------------------------|
+| Frontend | Vite dev server with HMR | Static build with Nginx |
+| Backend | Uvicorn with --reload | Uvicorn production mode |
+| Port | Frontend: 5173, Backend: 8000 | Frontend: 80, Backend: 8000 |
+| Source Code | Mounted as volumes | Copied into image |
+| Rebuild | Not needed for code changes | Required for every change |
+| Performance | Slower (dev mode) | Faster (optimized) |
+
+### Hot-Reload Features
+
+**Frontend (Vite HMR)**:
+- Instant updates on file save
+- Preserves component state
+- Fast refresh for Vue components
+- No page reload needed
+
+**Backend (Uvicorn --reload)**:
+- Auto-restart on Python file changes
+- Fast reload (< 1 second)
+- Preserves database connections
+- No container rebuild needed
+
+### Development Workflow
+
+1. **Start development environment**:
+   ```bash
+   docker-compose -f docker-compose.dev.yml up -d
+   ```
+
+2. **Edit code locally**:
+   - Frontend: Edit files in `./frontend/src/`
+   - Backend: Edit files in `./backend/app/` or `./backend/main.py`
+
+3. **See changes immediately**:
+   - Frontend: Browser auto-refreshes
+   - Backend: Server auto-reloads
+
+4. **No rebuild needed**:
+   - Changes are reflected instantly
+   - Only restart if you modify dependencies
+
+### When to Rebuild
+
+You only need to rebuild containers when:
+
+**Frontend**:
+- Adding/removing npm packages (`package.json` changes)
+- Modifying build configuration (`vite.config.ts`)
+
+```bash
+docker-compose -f docker-compose.dev.yml up -d --build frontend
+```
+
+**Backend**:
+- Adding/removing Python packages (`requirements.txt` changes)
+- Modifying Dockerfile
+
+```bash
+docker-compose -f docker-compose.dev.yml up -d --build backend
+```
+
+### Switching Between Modes
+
+**Development to Production**:
+```bash
+# Stop dev environment
+docker-compose -f docker-compose.dev.yml down
+
+# Start production environment
+docker-compose up -d
+```
+
+**Production to Development**:
+```bash
+# Stop production environment
+docker-compose down
+
+# Start dev environment
+docker-compose -f docker-compose.dev.yml up -d
+```
+
+### Troubleshooting Development Mode
+
+**Frontend not updating**:
+```bash
+# Check if volume is mounted correctly
+docker-compose -f docker-compose.dev.yml exec frontend ls -la /app/src
+
+# Restart frontend container
+docker-compose -f docker-compose.dev.yml restart frontend
+```
+
+**Backend not reloading**:
+```bash
+# Check if uvicorn reload is enabled
+docker-compose -f docker-compose.dev.yml logs backend | grep reload
+
+# Restart backend container
+docker-compose -f docker-compose.dev.yml restart backend
+```
+
+**Port conflicts**:
+```bash
+# Check if ports are already in use
+lsof -i :5173  # Frontend dev port
+lsof -i :8000  # Backend port
+
+# Kill conflicting processes or change ports in .env
 ```
 
 ## Maintenance
