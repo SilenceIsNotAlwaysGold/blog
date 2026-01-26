@@ -48,7 +48,8 @@ import { useRouter } from 'vue-router'
 import { Search } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import ArticleCard from '@/components/article/ArticleCard.vue'
-import { getArticles, searchArticles, type Article } from '@/api/article'
+import { getArticles, type Article } from '@/api/article'
+import { searchArticles } from '@/api/search'
 
 const router = useRouter()
 
@@ -86,14 +87,14 @@ const handleSearch = async () => {
 
   loading.value = true
   try {
-    const response = await searchArticles(
-      searchKeyword.value,
-      currentPage.value,
-      pageSize.value
-    )
+    const response = await searchArticles({
+      q: searchKeyword.value,
+      board: 'tech',
+      limit: pageSize.value
+    })
 
-    articles.value = response.data.items
-    total.value = response.data.pagination.total
+    articles.value = response.data.data
+    total.value = articles.value.length
   } catch (error: any) {
     ElMessage.error(error.message || 'Search failed')
   } finally {
