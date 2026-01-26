@@ -54,18 +54,22 @@ import { Calendar, View, Star } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import MarkdownViewer from '@/components/article/MarkdownViewer.vue'
 import { getArticle, type Article } from '@/api/article'
+import { toggleLike, checkLikeStatus } from '@/api/like'
 
 const route = useRoute()
 
 const loading = ref(false)
 const article = ref<Article | null>(null)
 const isLiked = ref(false)
+const liking = ref(false)
 
 const fetchArticle = async () => {
   loading.value = true
   try {
     const response = await getArticle(route.params.id as string)
     article.value = response.data
+    // 获取点赞状态
+    await fetchLikeStatus()
   } catch (error: any) {
     ElMessage.error(error.message || 'Failed to fetch article')
   } finally {
@@ -73,11 +77,37 @@ const fetchArticle = async () => {
   }
 }
 
-const handleLike = async () => {
+const fetchLikeStatus = async () => {
   if (!article.value) return
+  try {
+    const response = await checkLikeStatus(article.value.id)
+    isLiked.value = response.data.data.is_liked
+  } catch (error) {
+    // 静默失败，不影响主流程
+    console.error('Failed to fetch like status:', error)
+  }
+}
 
-  // TODO: Implement like API call
-  ElMessage.info('Like feature coming soon')
+const handleLike = async () => {
+  if (!article.value || liking.value) return
+
+  liking.value = true
+  try {
+    const response = await toggleLike(article.value.id)
+    const result = response.data.data
+
+    // 更新本地状态
+    isLiked.value = result.action === 'liked'
+    article.value.like_count = result.like_count
+
+    ElMessage.success(
+      result.action === 'liked' ? 'Liked successfully' : 'Unliked successfully'
+    )
+  } catch (error: any) {
+    ElMessage.error(error.message || 'Failed to toggle like')
+  } finally {
+    liking.value = false
+  }
 }
 
 const formatDate = (dateString: string) => {
