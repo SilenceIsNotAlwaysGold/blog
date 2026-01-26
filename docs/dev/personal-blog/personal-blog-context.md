@@ -55,13 +55,17 @@ updated_at: 2026-01-26T03:00:00Z
 ### Stage 5: Code Implementation
 - **status**: in_progress
 - **started_at**: 2026-01-26T03:10:00Z
-- **current_group**: 1 (completed)
+- **current_group**: 2 (completed)
 - **tasks**:
   - **T-001**: completed (commit: 4076240) - 项目初始化
   - **T-002**: completed (commit: 71d425e) - 数据库模型和连接
   - **T-003**: completed (commit: 1e5cd4b) - 认证模块实现
   - **T-004**: completed (commit: c859ccd) - 统一响应格式封装
   - **T-005**: completed (commit: 40d245d) - 前端项目初始化
+  - **T-006**: completed (commit: 3bb15e8) - 文章模块 API 实现
+  - **T-007**: completed (commit: e735fbe) - 分类和标签 API 实现
+  - **T-008**: completed (commit: d0ac102) - 前端认证模块实现
+  - **T-009**: completed (commit: b32bc18) - 前端路由和导航守卫
 
 ## Notes
 - Requirements document already exists with complexity=complex
