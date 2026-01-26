@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  # Test MongoDB
+  mongodb-test:
+    image: mongo:7.0
+    container_name: blog-test-mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: test
+      MONGO_INITDB_ROOT_PASSWORD: test
+      MONGO_INITDB_DATABASE: test_blog
+    ports:
+      - "27018:27017"
+    networks:
+      - test-network
+
+  # Test Backend
+  backend-test:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: blog-test-backend
+    environment:
+      MONGODB_URL: mongodb://test:test@mongodb-test:27017/test_blog?authSource=admin
+      SECRET_KEY: test-secret-key
+      TESTING: "true"
+    ports:
+      - "8001:8000"
+    depends_on:
+      - mongodb-test
+    networks:
+      - test-network
+    command: pytest tests/ -v
+
+networks:
+  test-network:
+    driver: bridge
