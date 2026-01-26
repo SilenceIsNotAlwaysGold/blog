@@ -21,9 +21,9 @@ class Article(Document):
     cover_image: Optional[str] = None
     view_count: int = Field(default=0, ge=0)
     like_count: int = Field(default=0, ge=0)
-    is_published: Indexed(bool) = Field(default=False)
+    is_published: bool = Field(default=False)
     published_at: Optional[datetime] = None
-    created_at: Indexed(datetime) = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
     class Settings:
@@ -38,6 +38,7 @@ class Article(Document):
         ]
 
     class Config:
+        arbitrary_types_allowed = True
         json_schema_extra = {
             "example": {
                 "title": "My First Article",

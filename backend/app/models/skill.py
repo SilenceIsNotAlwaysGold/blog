@@ -11,13 +11,13 @@ class Skill(Document):
     """Skill document model"""
 
     name: str = Field(..., min_length=1, max_length=50)
-    category: Indexed(str) = Field(
+    category: str = Field(
         ...,
         pattern="^(frontend|backend|database|devops|other)$"
     )
     proficiency: int = Field(..., ge=0, le=100)
     icon: Optional[str] = None
-    order: Indexed(int) = Field(default=0)
+    order: int = Field(default=0)
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
     class Settings:
@@ -28,6 +28,7 @@ class Skill(Document):
         ]
 
     class Config:
+        arbitrary_types_allowed = True
         json_schema_extra = {
             "example": {
                 "name": "Python",

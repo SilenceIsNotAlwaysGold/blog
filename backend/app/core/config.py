@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     """Application settings"""
 
     # MongoDB Configuration
-    MONGODB_URL: str = "mongodb://localhost:27017"
+    MONGODB_URL: str = "mongodb://mongodb:27017"
     MONGODB_DB_NAME: str = "personal_blog"
 
     # JWT Configuration

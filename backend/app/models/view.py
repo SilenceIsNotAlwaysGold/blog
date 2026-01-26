@@ -10,9 +10,9 @@ from bson import ObjectId
 class View(Document):
     """View record document model"""
 
-    article_id: Indexed(ObjectId)
+    article_id: ObjectId
     ip_address: str = Field(..., max_length=45)  # IPv6 max length
-    created_at: Indexed(datetime) = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=datetime.utcnow)
 
     class Settings:
         name = "views"
@@ -22,6 +22,7 @@ class View(Document):
         ]
 
     class Config:
+        arbitrary_types_allowed = True
         json_schema_extra = {
             "example": {
                 "article_id": "507f1f77bcf86cd799439011",

@@ -11,7 +11,7 @@ class Category(Document):
     """Category document model"""
 
     name: str = Field(..., min_length=1, max_length=50)
-    board: Indexed(str) = Field(..., pattern="^(life|tech)$")
+    board: str = Field(..., pattern="^(life|tech)$")
     description: Optional[str] = Field(None, max_length=200)
     article_count: int = Field(default=0, ge=0)
     created_at: datetime = Field(default_factory=datetime.utcnow)
@@ -24,6 +24,7 @@ class Category(Document):
         ]
 
     class Config:
+        arbitrary_types_allowed = True
         json_schema_extra = {
             "example": {
                 "name": "技术分享",

@@ -8,7 +8,7 @@ import type { ApiResponse } from '@/types/common'
 /**
  * User login
  */
-export function login(data: LoginRequest): Promise<ApiResponse<TokenResponse>> {
+export function login(data: LoginRequest): Promise<ApiResponse<TokenResponse> | TokenResponse> {
   return request({
     url: '/auth/login',
     method: 'post',
@@ -19,7 +19,7 @@ export function login(data: LoginRequest): Promise<ApiResponse<TokenResponse>> {
 /**
  * User registration (admin only)
  */
-export function register(data: RegisterRequest): Promise<ApiResponse<User>> {
+export function register(data: RegisterRequest): Promise<ApiResponse<User> | User> {
   return request({
     url: '/auth/register',
     method: 'post',
@@ -30,7 +30,7 @@ export function register(data: RegisterRequest): Promise<ApiResponse<User>> {
 /**
  * Refresh access token
  */
-export function refreshToken(): Promise<ApiResponse<TokenResponse>> {
+export function refreshToken(): Promise<ApiResponse<TokenResponse> | TokenResponse> {
   return request({
     url: '/auth/refresh',
     method: 'post'
@@ -40,7 +40,7 @@ export function refreshToken(): Promise<ApiResponse<TokenResponse>> {
 /**
  * Get current user info
  */
-export function getCurrentUser(): Promise<ApiResponse<User>> {
+export function getCurrentUser(): Promise<ApiResponse<User> | User> {
   return request({
     url: '/auth/me',
     method: 'get'

@@ -16,7 +16,7 @@ class Project(Document):
     project_url: Optional[str] = None
     github_url: Optional[str] = None
     cover_image: Optional[str] = None
-    order: Indexed(int) = Field(default=0)
+    order: int = Field(default=0)
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
     class Settings:
@@ -26,6 +26,7 @@ class Project(Document):
         ]
 
     class Config:
+        arbitrary_types_allowed = True
         json_schema_extra = {
             "example": {
                 "name": "Personal Blog",

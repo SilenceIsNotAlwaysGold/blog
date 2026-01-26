@@ -36,9 +36,9 @@ class ProjectService:
             # 技术栈包含指定技术
             query = query.find(Project.tech_stack == tech)
 
-        # 按 order 和开始日期排序
+        # 按 order 排序
         projects = await query.sort(
-            [(Project.order, -1), (Project.start_date, -1)]
+            [(Project.order, -1)]
         ).skip(skip).limit(limit).to_list()
 
         return projects

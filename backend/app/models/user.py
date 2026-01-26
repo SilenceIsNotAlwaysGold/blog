@@ -26,6 +26,7 @@ class User(Document):
         ]
 
     class Config:
+        arbitrary_types_allowed = True
         json_schema_extra = {
             "example": {
                 "username": "admin",
