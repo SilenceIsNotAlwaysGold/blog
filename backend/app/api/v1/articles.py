@@ -1,7 +1,7 @@
 """
 Article API endpoints
 """
-from fastapi import APIRouter, HTTPException, status, Depends, Request
+from fastapi import APIRouter, HTTPException, status, Depends, Request, Body
 from typing import Optional
 from app.schemas.article import (
     ArticleCreate,
@@ -133,11 +133,16 @@ async def update_article(
 ):
     """
     Update an article
-    Requires authentication
+    Requires authentication. Only the author or admin can update.
     """
-    article = await ArticleService.update_article(article_id, article_data)
-    if not article:
+    existing = await ArticleService.get_article_by_id(article_id)
+    if not existing:
         raise NotFoundException("Article not found")
+
+    if str(existing.author_id) != str(current_user.id) and current_user.role != "admin":
+        raise ForbiddenException("You can only edit your own articles")
+
+    article = await ArticleService.update_article(article_id, article_data)
 
     return success(
         data=article_to_response(article),
@@ -152,20 +157,25 @@ async def delete_article(
 ):
     """
     Delete an article
-    Requires authentication
+    Requires authentication. Only the author or admin can delete.
     """
-    success_delete = await ArticleService.delete_article(article_id)
-    if not success_delete:
+    existing = await ArticleService.get_article_by_id(article_id)
+    if not existing:
         raise NotFoundException("Article not found")
+
+    if str(existing.author_id) != str(current_user.id) and current_user.role != "admin":
+        raise ForbiddenException("You can only delete your own articles")
+
+    await ArticleService.delete_article(article_id)
 
     return success(message="Article deleted successfully")
 
 
 @router.post("/search", response_model=dict)
 async def search_articles(
-    keyword: str,
-    page: int = 1,
-    page_size: int = 10
+    keyword: str = Body(...),
+    page: int = Body(1),
+    page_size: int = Body(10)
 ):
     """
     Search articles by keyword

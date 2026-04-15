@@ -1,0 +1,800 @@
+{
+  "results": {
+    "CentOS 网络配置指南.md": {
+      "line_count": 89,
+      "word_count": 1747,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 10,
+      "category": "Linux系统"
+    },
+    "CentOS上进行解压.md": {
+      "line_count": 44,
+      "word_count": 1698,
+      "quality": "需要补充",
+      "has_code": true,
+      "headers": 1,
+      "category": "Linux系统"
+    },
+    "Django的相关操作.md": {
+      "line_count": 63,
+      "word_count": 2015,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 0,
+      "category": "编程语言-Python"
+    },
+    "Docker 命令详解与常见操作.md": {
+      "line_count": 162,
+      "word_count": 2180,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 27,
+      "category": "容器与编排"
+    },
+    "Docker 学习指南.md": {
+      "line_count": 241,
+      "word_count": 4311,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 39,
+      "category": "容器与编排"
+    },
+    "Docker 进阶.md": {
+      "line_count": 141,
+      "word_count": 3043,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 24,
+      "category": "容器与编排"
+    },
+    "Elasticsearch学习.md": {
+      "line_count": 227,
+      "word_count": 12517,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 14,
+      "category": "数据库"
+    },
+    "FastAPI详解：.md": {
+      "line_count": 124,
+      "word_count": 8193,
+      "quality": "完整",
+      "has_code": false,
+      "headers": 0,
+      "category": "编程语言-Python"
+    },
+    "Golang基础知识.md": {
+      "line_count": 277,
+      "word_count": 3113,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 21,
+      "category": "编程语言-Golang"
+    },
+    "Golang增删改查（CRUD）操作.md": {
+      "line_count": 350,
+      "word_count": 6200,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 4,
+      "category": "编程语言-Golang"
+    },
+    "Golang的数据库连接.md": {
+      "line_count": 217,
+      "word_count": 4118,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 13,
+      "category": "编程语言-Golang"
+    },
+    "Golang网络编程、数据库编程和Web框架.md": {
+      "line_count": 177,
+      "word_count": 2858,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 9,
+      "category": "编程语言-Golang"
+    },
+    "Golang高级主题.md": {
+      "line_count": 186,
+      "word_count": 2087,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 10,
+      "category": "编程语言-Golang"
+    },
+    "Kafka 集群部署指南.md": {
+      "line_count": 151,
+      "word_count": 3559,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 16,
+      "category": "容器与编排"
+    },
+    "Linux操作系统.md": {
+      "line_count": 213,
+      "word_count": 4274,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 34,
+      "category": "Linux系统"
+    },
+    "MariaDB_.md": {
+      "line_count": 24,
+      "word_count": 1614,
+      "quality": "需要补充",
+      "has_code": true,
+      "headers": 4,
+      "category": "数据库"
+    },
+    "MongoDB的安装.md": {
+      "line_count": 22,
+      "word_count": 641,
+      "quality": "简陋",
+      "has_code": false,
+      "headers": 0,
+      "category": "数据库"
+    },
+    "Mongodb.md": {
+      "line_count": 3,
+      "word_count": 134,
+      "quality": "只有链接",
+      "has_code": false,
+      "headers": 0,
+      "category": "数据库"
+    },
+    "MySQL 数据库其他相关.md": {
+      "line_count": 100,
+      "word_count": 3942,
+      "quality": "完整",
+      "has_code": false,
+      "headers": 0,
+      "category": "数据库"
+    },
+    "MySQL 的高可用.md": {
+      "line_count": 74,
+      "word_count": 4293,
+      "quality": "完整",
+      "has_code": false,
+      "headers": 4,
+      "category": "数据库"
+    },
+    "MySQL数据库的基本信息.md": {
+      "line_count": 257,
+      "word_count": 4136,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 32,
+      "category": "数据库"
+    },
+    "MySQL知识点.md": {
+      "line_count": 110,
+      "word_count": 2256,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 20,
+      "category": "数据库"
+    },
+    "MySQL进阶.md": {
+      "line_count": 255,
+      "word_count": 3884,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 27,
+      "category": "数据库"
+    },
+    "NLTK.md": {
+      "line_count": 24,
+      "word_count": 1393,
+      "quality": "简陋",
+      "has_code": false,
+      "headers": 2,
+      "category": "编程语言-Python"
+    },
+    "NLTK常见使用场景.md": {
+      "line_count": 69,
+      "word_count": 1572,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 10,
+      "category": "编程语言-Python"
+    },
+    "Nginx 详解.md": {
+      "line_count": 98,
+      "word_count": 2165,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 20,
+      "category": "Web服务器"
+    },
+    "Nginx 配置详解.md": {
+      "line_count": 263,
+      "word_count": 4564,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 24,
+      "category": "Web服务器"
+    },
+    "Nginx和Apache.md": {
+      "line_count": 42,
+      "word_count": 1577,
+      "quality": "需要补充",
+      "has_code": true,
+      "headers": 2,
+      "category": "Web服务器"
+    },
+    "Nginx配置示例.md": {
+      "line_count": 166,
+      "word_count": 3987,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 14,
+      "category": "Web服务器"
+    },
+    "Redis 各类操作指令详解.md": {
+      "line_count": 175,
+      "word_count": 5269,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 15,
+      "category": "数据库"
+    },
+    "Redis 学习.md": {
+      "line_count": 279,
+      "word_count": 4508,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 34,
+      "category": "数据库"
+    },
+    "Redis.md": {
+      "line_count": 353,
+      "word_count": 7730,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 25,
+      "category": "数据库"
+    },
+    "Redis主从复制和集群配置.md": {
+      "line_count": 183,
+      "word_count": 3174,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 14,
+      "category": "数据库"
+    },
+    "SQLAlchemy操作.md": {
+      "line_count": 394,
+      "word_count": 69912,
+      "quality": "完整",
+      "has_code": false,
+      "headers": 2,
+      "category": "编程语言-Python"
+    },
+    "celery 设置定时任务 (1).md": {
+      "line_count": 78,
+      "word_count": 1474,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 0,
+      "category": "编程语言-Python"
+    },
+    "celery 设置定时任务.md": {
+      "line_count": 78,
+      "word_count": 1474,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 0,
+      "category": "编程语言-Python"
+    },
+    "docker安装、验证kafka操作.md": {
+      "line_count": 209,
+      "word_count": 5082,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 9,
+      "category": "容器与编排"
+    },
+    "flask 的响应 flask_restful.md": {
+      "line_count": 161,
+      "word_count": 3618,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 2,
+      "category": "编程语言-Python"
+    },
+    "flask 的请求处理 flask_restful.md": {
+      "line_count": 77,
+      "word_count": 3709,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 6,
+      "category": "编程语言-Python"
+    },
+    "git的各种操作.md": {
+      "line_count": 132,
+      "word_count": 2034,
+      "quality": "完整",
+      "has_code": false,
+      "headers": 11,
+      "category": "版本控制"
+    },
+    "git相关操作.md": {
+      "line_count": 171,
+      "word_count": 910,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 0,
+      "category": "版本控制"
+    },
+    "redis的各种类型以及操作 (1).md": {
+      "line_count": 3,
+      "word_count": 140,
+      "quality": "只有链接",
+      "has_code": false,
+      "headers": 0,
+      "category": "数据库"
+    },
+    "redis的各种类型以及操作.md": {
+      "line_count": 3,
+      "word_count": 140,
+      "quality": "只有链接",
+      "has_code": false,
+      "headers": 0,
+      "category": "数据库"
+    },
+    "reids的主从和集群配置.md": {
+      "line_count": 3,
+      "word_count": 131,
+      "quality": "只有链接",
+      "has_code": false,
+      "headers": 0,
+      "category": "其他"
+    },
+    "requests.md": {
+      "line_count": 156,
+      "word_count": 2204,
+      "quality": "完整",
+      "has_code": false,
+      "headers": 14,
+      "category": "编程语言-Python"
+    },
+    "xlsx  多表去重.md": {
+      "line_count": 117,
+      "word_count": 3189,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 9,
+      "category": "数据分析"
+    },
+    "即时通讯.md": {
+      "line_count": 3,
+      "word_count": 130,
+      "quality": "只有链接",
+      "has_code": false,
+      "headers": 0,
+      "category": "其他"
+    },
+    "可灵 自动跑视频.md": {
+      "line_count": 152,
+      "word_count": 4905,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 7,
+      "category": "其他"
+    },
+    "各类快捷方式.md": {
+      "line_count": 19,
+      "word_count": 93,
+      "quality": "简陋",
+      "has_code": false,
+      "headers": 0,
+      "category": "其他"
+    },
+    "因子分析的举例.md": {
+      "line_count": 69,
+      "word_count": 1220,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 4,
+      "category": "机器学习"
+    },
+    "在Linux上打包虚拟环境的依赖项_.md": {
+      "line_count": 27,
+      "word_count": 840,
+      "quality": "需要补充",
+      "has_code": true,
+      "headers": 5,
+      "category": "Linux系统"
+    },
+    "基础和理论.md": {
+      "line_count": 20,
+      "word_count": 700,
+      "quality": "简陋",
+      "has_code": false,
+      "headers": 1,
+      "category": "其他"
+    },
+    "安装Redis.md": {
+      "line_count": 33,
+      "word_count": 1005,
+      "quality": "需要补充",
+      "has_code": true,
+      "headers": 1,
+      "category": "数据库"
+    },
+    "安装使用.md": {
+      "line_count": 72,
+      "word_count": 3081,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 2,
+      "category": "其他"
+    },
+    "常见的分析趋势方法.md": {
+      "line_count": 147,
+      "word_count": 2797,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 14,
+      "category": "数据分析"
+    },
+    "常见的绘制图表类型.md": {
+      "line_count": 141,
+      "word_count": 2402,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 1,
+      "category": "数据分析"
+    },
+    "强化学习算法（机器人-了解）.md": {
+      "line_count": 116,
+      "word_count": 2732,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 10,
+      "category": "机器学习"
+    },
+    "快速安装Docker-Compose.md": {
+      "line_count": 92,
+      "word_count": 1238,
+      "quality": "完整",
+      "has_code": false,
+      "headers": 8,
+      "category": "容器与编排"
+    },
+    "性能优化.md": {
+      "line_count": 48,
+      "word_count": 4519,
+      "quality": "需要补充",
+      "has_code": false,
+      "headers": 4,
+      "category": "其他"
+    },
+    "文件上传.md": {
+      "line_count": 49,
+      "word_count": 4459,
+      "quality": "需要补充",
+      "has_code": true,
+      "headers": 2,
+      "category": "其他"
+    },
+    "无监督学习算法.md": {
+      "line_count": 84,
+      "word_count": 1282,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 0,
+      "category": "机器学习"
+    },
+    "机制原理.md": {
+      "line_count": 173,
+      "word_count": 10755,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 5,
+      "category": "其他"
+    },
+    "模型评估的常用方法.md": {
+      "line_count": 147,
+      "word_count": 2781,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 0,
+      "category": "机器学习"
+    },
+    "深度学习模型.md": {
+      "line_count": 116,
+      "word_count": 2981,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 5,
+      "category": "机器学习"
+    },
+    "混淆矩阵.md": {
+      "line_count": 44,
+      "word_count": 1646,
+      "quality": "需要补充",
+      "has_code": true,
+      "headers": 4,
+      "category": "机器学习"
+    },
+    "状态保持.md": {
+      "line_count": 107,
+      "word_count": 4049,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 11,
+      "category": "其他"
+    },
+    "监督学习算法.md": {
+      "line_count": 195,
+      "word_count": 3202,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 25,
+      "category": "机器学习"
+    },
+    "第三方源.md": {
+      "line_count": 13,
+      "word_count": 425,
+      "quality": "简陋",
+      "has_code": false,
+      "headers": 0,
+      "category": "其他"
+    },
+    "联想搜索建议 (1).md": {
+      "line_count": 3,
+      "word_count": 137,
+      "quality": "只有链接",
+      "has_code": false,
+      "headers": 0,
+      "category": "其他"
+    },
+    "联想搜索建议.md": {
+      "line_count": 3,
+      "word_count": 137,
+      "quality": "只有链接",
+      "has_code": false,
+      "headers": 0,
+      "category": "其他"
+    },
+    "聚类数量的确认.md": {
+      "line_count": 68,
+      "word_count": 1368,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 3,
+      "category": "机器学习"
+    },
+    "虚拟环境.md": {
+      "line_count": 74,
+      "word_count": 917,
+      "quality": "完整",
+      "has_code": false,
+      "headers": 8,
+      "category": "其他"
+    },
+    "账户操作.md": {
+      "line_count": 57,
+      "word_count": 4965,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 2,
+      "category": "其他"
+    },
+    "软件安装：.md": {
+      "line_count": 31,
+      "word_count": 658,
+      "quality": "需要补充",
+      "has_code": true,
+      "headers": 0,
+      "category": "其他"
+    },
+    "进阶Linux.md": {
+      "line_count": 378,
+      "word_count": 6282,
+      "quality": "完整",
+      "has_code": true,
+      "headers": 34,
+      "category": "Linux系统"
+    }
+  },
+  "category_stats": {
+    "Linux系统": [
+      "CentOS 网络配置指南.md",
+      "CentOS上进行解压.md",
+      "Linux操作系统.md",
+      "在Linux上打包虚拟环境的依赖项_.md",
+      "进阶Linux.md"
+    ],
+    "编程语言-Python": [
+      "Django的相关操作.md",
+      "FastAPI详解：.md",
+      "NLTK.md",
+      "NLTK常见使用场景.md",
+      "SQLAlchemy操作.md",
+      "celery 设置定时任务 (1).md",
+      "celery 设置定时任务.md",
+      "flask 的响应 flask_restful.md",
+      "flask 的请求处理 flask_restful.md",
+      "requests.md"
+    ],
+    "容器与编排": [
+      "Docker 命令详解与常见操作.md",
+      "Docker 学习指南.md",
+      "Docker 进阶.md",
+      "Kafka 集群部署指南.md",
+      "docker安装、验证kafka操作.md",
+      "快速安装Docker-Compose.md"
+    ],
+    "数据库": [
+      "Elasticsearch学习.md",
+      "MariaDB_.md",
+      "MongoDB的安装.md",
+      "Mongodb.md",
+      "MySQL 数据库其他相关.md",
+      "MySQL 的高可用.md",
+      "MySQL数据库的基本信息.md",
+      "MySQL知识点.md",
+      "MySQL进阶.md",
+      "Redis 各类操作指令详解.md",
+      "Redis 学习.md",
+      "Redis.md",
+      "Redis主从复制和集群配置.md",
+      "redis的各种类型以及操作 (1).md",
+      "redis的各种类型以及操作.md",
+      "安装Redis.md"
+    ],
+    "编程语言-Golang": [
+      "Golang基础知识.md",
+      "Golang增删改查（CRUD）操作.md",
+      "Golang的数据库连接.md",
+      "Golang网络编程、数据库编程和Web框架.md",
+      "Golang高级主题.md"
+    ],
+    "Web服务器": [
+      "Nginx 详解.md",
+      "Nginx 配置详解.md",
+      "Nginx和Apache.md",
+      "Nginx配置示例.md"
+    ],
+    "版本控制": [
+      "git的各种操作.md",
+      "git相关操作.md"
+    ],
+    "其他": [
+      "reids的主从和集群配置.md",
+      "即时通讯.md",
+      "可灵 自动跑视频.md",
+      "各类快捷方式.md",
+      "基础和理论.md",
+      "安装使用.md",
+      "性能优化.md",
+      "文件上传.md",
+      "机制原理.md",
+      "状态保持.md",
+      "第三方源.md",
+      "联想搜索建议 (1).md",
+      "联想搜索建议.md",
+      "虚拟环境.md",
+      "账户操作.md",
+      "软件安装：.md"
+    ],
+    "数据分析": [
+      "xlsx  多表去重.md",
+      "常见的分析趋势方法.md",
+      "常见的绘制图表类型.md"
+    ],
+    "机器学习": [
+      "因子分析的举例.md",
+      "强化学习算法（机器人-了解）.md",
+      "无监督学习算法.md",
+      "模型评估的常用方法.md",
+      "深度学习模型.md",
+      "混淆矩阵.md",
+      "监督学习算法.md",
+      "聚类数量的确认.md"
+    ]
+  },
+  "quality_stats": {
+    "完整": [
+      "CentOS 网络配置指南.md",
+      "Django的相关操作.md",
+      "Docker 命令详解与常见操作.md",
+      "Docker 学习指南.md",
+      "Docker 进阶.md",
+      "Elasticsearch学习.md",
+      "FastAPI详解：.md",
+      "Golang基础知识.md",
+      "Golang增删改查（CRUD）操作.md",
+      "Golang的数据库连接.md",
+      "Golang网络编程、数据库编程和Web框架.md",
+      "Golang高级主题.md",
+      "Kafka 集群部署指南.md",
+      "Linux操作系统.md",
+      "MySQL 数据库其他相关.md",
+      "MySQL 的高可用.md",
+      "MySQL数据库的基本信息.md",
+      "MySQL知识点.md",
+      "MySQL进阶.md",
+      "NLTK常见使用场景.md",
+      "Nginx 详解.md",
+      "Nginx 配置详解.md",
+      "Nginx配置示例.md",
+      "Redis 各类操作指令详解.md",
+      "Redis 学习.md",
+      "Redis.md",
+      "Redis主从复制和集群配置.md",
+      "SQLAlchemy操作.md",
+      "celery 设置定时任务 (1).md",
+      "celery 设置定时任务.md",
+      "docker安装、验证kafka操作.md",
+      "flask 的响应 flask_restful.md",
+      "flask 的请求处理 flask_restful.md",
+      "git的各种操作.md",
+      "git相关操作.md",
+      "requests.md",
+      "xlsx  多表去重.md",
+      "可灵 自动跑视频.md",
+      "因子分析的举例.md",
+      "安装使用.md",
+      "常见的分析趋势方法.md",
+      "常见的绘制图表类型.md",
+      "强化学习算法（机器人-了解）.md",
+      "快速安装Docker-Compose.md",
+      "无监督学习算法.md",
+      "机制原理.md",
+      "模型评估的常用方法.md",
+      "深度学习模型.md",
+      "状态保持.md",
+      "监督学习算法.md",
+      "聚类数量的确认.md",
+      "虚拟环境.md",
+      "账户操作.md",
+      "进阶Linux.md"
+    ],
+    "需要补充": [
+      "CentOS上进行解压.md",
+      "MariaDB_.md",
+      "Nginx和Apache.md",
+      "在Linux上打包虚拟环境的依赖项_.md",
+      "安装Redis.md",
+      "性能优化.md",
+      "文件上传.md",
+      "混淆矩阵.md",
+      "软件安装：.md"
+    ],
+    "简陋": [
+      "MongoDB的安装.md",
+      "NLTK.md",
+      "各类快捷方式.md",
+      "基础和理论.md",
+      "第三方源.md"
+    ],
+    "只有链接": [
+      "Mongodb.md",
+      "redis的各种类型以及操作 (1).md",
+      "redis的各种类型以及操作.md",
+      "reids的主从和集群配置.md",
+      "即时通讯.md",
+      "联想搜索建议 (1).md",
+      "联想搜索建议.md"
+    ]
+  },
+  "duplicates": {
+    "celery 设置定时任务.md": [
+      "celery 设置定时任务 (1).md",
+      "celery 设置定时任务.md"
+    ],
+    "redis的各种类型以及操作.md": [
+      "redis的各种类型以及操作 (1).md",
+      "redis的各种类型以及操作.md"
+    ],
+    "联想搜索建议.md": [
+      "联想搜索建议 (1).md",
+      "联想搜索建议.md"
+    ]
+  }
+}

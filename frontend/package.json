@@ -9,23 +9,31 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "vue": "^3.3.11",
-    "vue-router": "^4.2.5",
-    "pinia": "^2.1.7",
+    "@tsparticles/engine": "^3.9.1",
+    "@tsparticles/slim": "^3.9.1",
+    "@tsparticles/vue3": "^3.0.1",
     "axios": "^1.6.2",
     "element-plus": "^2.4.4",
+    "gsap": "^3.14.2",
+    "pinia": "^2.1.7",
+    "prismjs": "^1.29.0",
+    "tsparticles": "^3.9.1",
     "vditor": "^3.9.9",
-    "prismjs": "^1.29.0"
+    "vue": "^3.3.11",
+    "vue-router": "^4.2.5"
   },
   "devDependencies": {
+    "@types/node": "^25.0.10",
     "@vitejs/plugin-vue": "^4.5.2",
     "@vue/eslint-config-typescript": "^12.0.0",
+    "@vue/test-utils": "^2.4.3",
     "eslint": "^8.56.0",
     "eslint-plugin-vue": "^9.19.2",
+    "jsdom": "^27.4.0",
+    "sass": "^1.97.3",
     "typescript": "~5.3.3",
     "vite": "^5.0.10",
-    "vue-tsc": "^1.8.27",
     "vitest": "^1.1.0",
-    "@vue/test-utils": "^2.4.3"
+    "vue-tsc": "^1.8.27"
   }
 }

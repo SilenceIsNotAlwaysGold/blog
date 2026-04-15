@@ -9,6 +9,26 @@ from app.utils.response import success, error
 router = APIRouter(prefix="/projects", tags=["projects"])
 
 
+def project_to_response(project) -> dict:
+    """Convert Project model to response dict"""
+    return ProjectResponse(
+        id=str(project.id),
+        name=project.name,
+        description=project.description,
+        tech_stack=project.tech_stack,
+        cover_image=project.cover_image,
+        demo_url=project.demo_url,
+        github_url=project.github_url,
+        start_date=project.start_date,
+        end_date=project.end_date,
+        status=project.status,
+        highlights=project.highlights,
+        order=project.order,
+        created_at=project.created_at,
+        updated_at=project.updated_at,
+    ).model_dump()
+
+
 @router.post("", response_model=dict, status_code=status.HTTP_201_CREATED)
 async def create_project(
     project_data: ProjectCreate,
@@ -23,7 +43,7 @@ async def create_project(
 
     project = await ProjectService.create_project(project_data)
     return success(
-        data=ProjectResponse.model_validate(project).model_dump(),
+        data=project_to_response(project),
         message="Project created successfully"
     )
 
@@ -37,18 +57,17 @@ async def get_projects(
 ):
     """获取项目列表（公开访问）"""
     projects = await ProjectService.get_projects(status, tech, skip, limit)
-    return success(
-        data=[ProjectResponse.model_validate(p).model_dump() for p in projects]
-    )
+
+    result = [project_to_response(p) for p in projects]
+    return success(data=result)
 
 
 @router.get("/featured", response_model=dict)
 async def get_featured_projects(limit: int = 6):
     """获取精选项目（公开访问）"""
     projects = await ProjectService.get_featured_projects(limit)
-    return success(
-        data=[ProjectResponse.model_validate(p).model_dump() for p in projects]
-    )
+    result = [project_to_response(p) for p in projects]
+    return success(data=result)
 
 
 @router.get("/tech-stack", response_model=dict)
@@ -68,7 +87,7 @@ async def get_project(project_id: str):
             detail="Project not found"
         )
 
-    return success(data=ProjectResponse.model_validate(project).model_dump())
+    return success(data=project_to_response(project))
 
 
 @router.put("/{project_id}", response_model=dict)
@@ -92,7 +111,7 @@ async def update_project(
         )
 
     return success(
-        data=ProjectResponse.model_validate(project).model_dump(),
+        data=project_to_response(project),
         message="Project updated successfully"
     )
 

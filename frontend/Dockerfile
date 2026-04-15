@@ -6,8 +6,11 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
+# Configure npm to use Taobao mirror for faster downloads in China
+RUN npm config set registry https://registry.npmmirror.com
+
 # Install dependencies
-RUN npm ci
+RUN npm install
 
 # Copy source code
 COPY . .

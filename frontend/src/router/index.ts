@@ -27,18 +27,6 @@ const routes: RouteRecordRaw[] = [
         meta: { title: 'Article Detail' }
       },
       {
-        path: 'life',
-        name: 'life',
-        component: () => import('@/pages/life/List.vue'),
-        meta: { title: 'Life Board', requiresAuth: true }
-      },
-      {
-        path: 'life/:id',
-        name: 'life-detail',
-        component: () => import('@/pages/life/Detail.vue'),
-        meta: { title: 'Article Detail', requiresAuth: true }
-      },
-      {
         path: 'about',
         name: 'about',
         component: () => import('@/pages/about/Index.vue'),
@@ -54,7 +42,19 @@ const routes: RouteRecordRaw[] = [
         path: 'projects',
         name: 'projects',
         component: () => import('@/pages/projects/Index.vue'),
-        meta: { title: 'Projects' }
+        meta: { title: '项目展示' }
+      },
+      {
+        path: 'tags',
+        name: 'tags',
+        component: () => import('@/pages/tags/Index.vue'),
+        meta: { title: '标签云' }
+      },
+      {
+        path: 'archives',
+        name: 'archives',
+        component: () => import('@/pages/archives/Index.vue'),
+        meta: { title: '文章归档' }
       }
     ]
   },
@@ -62,19 +62,72 @@ const routes: RouteRecordRaw[] = [
     path: '/login',
     name: 'login',
     component: () => import('@/pages/auth/Login.vue'),
-    meta: { title: 'Login' }
+    meta: { title: '登录' }
   },
   {
     path: '/admin',
-    name: 'admin',
-    component: () => import('@/pages/admin/Dashboard.vue'),
-    meta: { title: 'Dashboard', requiresAuth: true, requiresAdmin: true }
+    component: DefaultLayout,
+    meta: { requiresAuth: true, requiresAdmin: true },
+    children: [
+      {
+        path: 'dashboard',
+        name: 'admin-dashboard',
+        component: () => import('@/pages/admin/Dashboard.vue'),
+        meta: { title: '管理中心' }
+      },
+      {
+        path: 'article/new',
+        name: 'article-new',
+        component: () => import('@/pages/admin/ArticleEditor.vue'),
+        meta: { title: '新建文章' }
+      },
+      {
+        path: 'article/edit/:id',
+        name: 'article-edit',
+        component: () => import('@/pages/admin/ArticleEditor.vue'),
+        meta: { title: '编辑文章' }
+      },
+      {
+        path: 'project/new',
+        name: 'project-new',
+        component: () => import('@/pages/admin/ProjectEditor.vue'),
+        meta: { title: '新建项目' }
+      },
+      {
+        path: 'project/edit/:id',
+        name: 'project-edit',
+        component: () => import('@/pages/admin/ProjectEditor.vue'),
+        meta: { title: '编辑项目' }
+      },
+      {
+        path: 'skill/new',
+        name: 'skill-new',
+        component: () => import('@/pages/admin/SkillEditor.vue'),
+        meta: { title: '新建技能' }
+      },
+      {
+        path: 'skill/edit/:id',
+        name: 'skill-edit',
+        component: () => import('@/pages/admin/SkillEditor.vue'),
+        meta: { title: '编辑技能' }
+      },
+      {
+        path: 'about/edit',
+        name: 'about-edit',
+        component: () => import('@/pages/admin/AboutEditor.vue'),
+        meta: { title: '编辑关于' }
+      }
+    ]
   }
 ]
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes
+  routes,
+  scrollBehavior(_to, _from, savedPosition) {
+    if (savedPosition) return savedPosition
+    return { top: 0, behavior: 'smooth' }
+  }
 })
 
 // Navigation guard
@@ -101,9 +154,9 @@ router.beforeEach((to, _from, next) => {
     return
   }
 
-  // If already logged in and trying to access login page, redirect to admin
+  // If already logged in and trying to access login page, redirect to home
   if (to.name === 'login' && userStore.isAuthenticated) {
-    next({ name: 'admin' })
+    next({ name: 'home' })
     return
   }
 

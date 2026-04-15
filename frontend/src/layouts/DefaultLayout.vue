@@ -5,6 +5,7 @@
       <router-view />
     </main>
     <Footer />
+    <el-backtop :right="30" :bottom="30" />
   </div>
 </template>
 
@@ -18,13 +19,11 @@ import Footer from '@/components/common/Footer.vue'
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: var(--bg-primary);
 }
 
 .main-content {
   flex: 1;
-  max-width: 1200px;
   width: 100%;
-  margin: 2rem auto;
-  padding: 0 1rem;
 }
 </style>

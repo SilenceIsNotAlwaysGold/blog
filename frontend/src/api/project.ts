@@ -54,7 +54,7 @@ export const getProjects = (params?: {
   skip?: number
   limit?: number
 }) => {
-  return request<{ data: Project[] }>({
+  return request({
     url: '/projects',
     method: 'get',
     params
@@ -65,7 +65,7 @@ export const getProjects = (params?: {
  * 获取精选项目
  */
 export const getFeaturedProjects = (limit: number = 6) => {
-  return request<{ data: Project[] }>({
+  return request({
     url: '/projects/featured',
     method: 'get',
     params: { limit }
@@ -76,7 +76,7 @@ export const getFeaturedProjects = (limit: number = 6) => {
  * 获取技术栈列表
  */
 export const getTechStack = () => {
-  return request<{ data: string[] }>({
+  return request({
     url: '/projects/tech-stack',
     method: 'get'
   })
@@ -86,7 +86,7 @@ export const getTechStack = () => {
  * 获取单个项目
  */
 export const getProject = (id: string) => {
-  return request<{ data: Project }>({
+  return request({
     url: `/projects/${id}`,
     method: 'get'
   })
@@ -96,7 +96,7 @@ export const getProject = (id: string) => {
  * 创建项目
  */
 export const createProject = (data: ProjectCreate) => {
-  return request<{ data: Project }>({
+  return request({
     url: '/projects',
     method: 'post',
     data
@@ -107,7 +107,7 @@ export const createProject = (data: ProjectCreate) => {
  * 更新项目
  */
 export const updateProject = (id: string, data: ProjectUpdate) => {
-  return request<{ data: Project }>({
+  return request({
     url: `/projects/${id}`,
     method: 'put',
     data

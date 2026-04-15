@@ -7,6 +7,7 @@ from bson import ObjectId
 from app.models.article import Article
 from app.models.view import View
 from app.schemas.article import ArticleCreate, ArticleUpdate
+from app.services.category import TagService
 
 
 class ArticleService:
@@ -32,6 +33,11 @@ class ArticleService:
         )
 
         await article.insert()
+        
+        # Update tags
+        if article.tags:
+            await TagService.update_tag_counts(article.tags, [])
+            
         return article
 
     @staticmethod
@@ -92,6 +98,16 @@ class ArticleService:
         # Update fields
         update_data = article_data.model_dump(exclude_unset=True)
 
+        # Calculate tag changes
+        tags_to_add = []
+        tags_to_remove = []
+        
+        if "tags" in update_data:
+            old_tags = set(article.tags)
+            new_tags = set(update_data["tags"])
+            tags_to_add = list(new_tags - old_tags)
+            tags_to_remove = list(old_tags - new_tags)
+
         if "category_id" in update_data and update_data["category_id"]:
             update_data["category_id"] = ObjectId(update_data["category_id"])
 
@@ -106,6 +122,11 @@ class ArticleService:
 
         # Update article
         await article.set(update_data)
+        
+        # Update tags
+        if tags_to_add or tags_to_remove:
+            await TagService.update_tag_counts(tags_to_add, tags_to_remove)
+            
         return article
 
     @staticmethod
@@ -116,6 +137,11 @@ class ArticleService:
             return False
 
         await article.delete()
+        
+        # Update tags
+        if article.tags:
+            await TagService.update_tag_counts([], article.tags)
+            
         return True
 
     @staticmethod

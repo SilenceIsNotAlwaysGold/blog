@@ -1,0 +1,19 @@
+/**
+ * 首页样式变量
+ */
+
+// 响应式断点
+$breakpoint-mobile: 768px;
+$breakpoint-tablet: 1024px;
+$breakpoint-desktop: 1440px;
+
+// 动画时长
+$transition-fast: 0.2s;
+$transition-normal: 0.3s;
+$transition-slow: 0.5s;
+
+// Z-index 层级
+$z-index-particle: 1;
+$z-index-mouse-follower: 5;
+$z-index-content: 10;
+$z-index-theme-toggle: 1000;

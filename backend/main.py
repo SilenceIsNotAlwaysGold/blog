@@ -2,10 +2,13 @@
 Personal Blog System - FastAPI Backend
 Main application entry point
 """
+import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
+from app.core.config import settings
 from app.core.database import connect_to_database, close_database_connection
+from app.middleware.error_handler import register_exception_handlers
 from app.api.v1 import (
     auth,
     articles,
@@ -19,6 +22,8 @@ from app.api.v1 import (
     search,
     statistics
 )
+
+logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
@@ -38,14 +43,18 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# CORS middleware
+# CORS middleware - use configured origins
+cors_origins = [origin.strip() for origin in settings.CORS_ORIGINS.split(",") if origin.strip()]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, specify exact origins
+    allow_origins=cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Register global exception handlers
+register_exception_handlers(app)
 
 # Register API routers
 app.include_router(auth.router, prefix="/api/v1")
@@ -72,4 +81,8 @@ async def health_check():
 
 if __name__ == "__main__":
     import uvicorn
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+    )
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

@@ -13,7 +13,15 @@
     "prod:restart": "docker-compose restart",
     "test": "bash run-tests.sh"
   },
-  "keywords": ["blog", "fastapi", "vue3", "mongodb"],
+  "keywords": [
+    "blog",
+    "fastapi",
+    "vue3",
+    "mongodb"
+  ],
   "author": "Personal Blog System",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@playwright/test": "^1.58.0"
+  }
 }

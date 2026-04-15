@@ -1,8 +1,11 @@
+import logging
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from typing import Optional
 from app.schemas.email import EmailSend
+
+logger = logging.getLogger(__name__)
 
 
 class EmailService:
@@ -59,7 +62,7 @@ class EmailService:
 
             return True
         except Exception as e:
-            print(f"Failed to send email: {str(e)}")
+            logger.error(f"Failed to send email: {e}")
             return False
 
     async def send_welcome_email(self, to_email: str, username: str) -> bool:
@@ -168,15 +171,13 @@ def get_email_service() -> Optional[EmailService]:
         try:
             from app.core.config import settings
             _email_service = EmailService(
-                smtp_host=settings.smtp_host,
-                smtp_port=settings.smtp_port,
-                smtp_user=settings.smtp_user,
-                smtp_password=settings.smtp_password,
-                from_email=settings.from_email,
-                from_name=settings.from_name,
-                use_tls=settings.use_tls
+                smtp_host=settings.SMTP_HOST,
+                smtp_port=settings.SMTP_PORT,
+                smtp_user=settings.SMTP_USER,
+                smtp_password=settings.SMTP_PASSWORD,
+                from_email=settings.SMTP_FROM_EMAIL,
+                from_name=settings.SMTP_FROM_NAME,
             )
         except Exception:
-            # 如果配置不存在，返回 None
             pass
     return _email_service

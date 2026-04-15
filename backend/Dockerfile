@@ -1,17 +1,19 @@
 # Backend Dockerfile
-FROM python:3.10-slim
+FROM python:3.12-slim
 
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    gcc \
-    && rm -rf /var/lib/apt/lists/*
+# Configure pip to use Aliyun mirror for faster downloads in China
+RUN pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/ && \
+    pip config set global.trusted-host mirrors.aliyun.com
+
+# Upgrade pip
+RUN pip install --upgrade pip
 
 # Copy requirements
 COPY requirements.txt .
 
-# Install Python dependencies
+# Install Python dependencies (all packages have pre-built wheels, no gcc needed)
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code

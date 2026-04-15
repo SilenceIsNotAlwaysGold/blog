@@ -38,7 +38,7 @@ export interface SkillsGrouped {
  * 获取技能列表
  */
 export const getSkills = (params?: { category?: string; skip?: number; limit?: number }) => {
-  return request<{ data: Skill[] }>({
+  return request({
     url: '/skills',
     method: 'get',
     params
@@ -49,7 +49,7 @@ export const getSkills = (params?: { category?: string; skip?: number; limit?: n
  * 获取分组的技能
  */
 export const getSkillsGrouped = () => {
-  return request<{ data: SkillsGrouped }>({
+  return request({
     url: '/skills/grouped',
     method: 'get'
   })
@@ -59,7 +59,7 @@ export const getSkillsGrouped = () => {
  * 获取所有技能分类
  */
 export const getCategories = () => {
-  return request<{ data: string[] }>({
+  return request({
     url: '/skills/categories',
     method: 'get'
   })
@@ -69,7 +69,7 @@ export const getCategories = () => {
  * 获取单个技能
  */
 export const getSkill = (id: string) => {
-  return request<{ data: Skill }>({
+  return request({
     url: `/skills/${id}`,
     method: 'get'
   })
@@ -79,7 +79,7 @@ export const getSkill = (id: string) => {
  * 创建技能
  */
 export const createSkill = (data: SkillCreate) => {
-  return request<{ data: Skill }>({
+  return request({
     url: '/skills',
     method: 'post',
     data
@@ -90,7 +90,7 @@ export const createSkill = (data: SkillCreate) => {
  * 更新技能
  */
 export const updateSkill = (id: string, data: SkillUpdate) => {
-  return request<{ data: Skill }>({
+  return request({
     url: `/skills/${id}`,
     method: 'put',
     data

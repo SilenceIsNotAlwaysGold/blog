@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import type { ApiResponse } from '@/types/common'
 
 export interface LikeResponse {
   action: 'liked' | 'unliked'
@@ -16,8 +17,8 @@ export interface LikeCount {
 /**
  * 切换点赞状态
  */
-export const toggleLike = (articleId: string) => {
-  return request<{ data: LikeResponse }>({
+export const toggleLike = (articleId: string): Promise<ApiResponse<LikeResponse>> => {
+  return request({
     url: `/likes/${articleId}`,
     method: 'post'
   })
@@ -26,8 +27,8 @@ export const toggleLike = (articleId: string) => {
 /**
  * 检查点赞状态
  */
-export const checkLikeStatus = (articleId: string) => {
-  return request<{ data: LikeStatus }>({
+export const checkLikeStatus = (articleId: string): Promise<ApiResponse<LikeStatus>> => {
+  return request({
     url: `/likes/${articleId}/status`,
     method: 'get'
   })
@@ -36,8 +37,8 @@ export const checkLikeStatus = (articleId: string) => {
 /**
  * 获取点赞数
  */
-export const getLikeCount = (articleId: string) => {
-  return request<{ data: LikeCount }>({
+export const getLikeCount = (articleId: string): Promise<ApiResponse<LikeCount>> => {
+  return request({
     url: `/likes/${articleId}/count`,
     method: 'get'
   })

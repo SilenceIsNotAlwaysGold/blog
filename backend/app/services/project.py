@@ -46,10 +46,8 @@ class ProjectService:
     @staticmethod
     async def get_featured_projects(limit: int = 6) -> List[Project]:
         """获取精选项目（按 order 排序，取前 N 个）"""
-        projects = await Project.find(
-            Project.status == "completed"
-        ).sort(
-            [(Project.order, -1), (Project.start_date, -1)]
+        projects = await Project.find_all().sort(
+            [(Project.order, -1)]
         ).limit(limit).to_list()
 
         return projects

@@ -27,8 +27,11 @@ class LikeService:
     @staticmethod
     async def toggle_like(article_id: str, request: Request) -> dict:
         """切换点赞状态（点赞/取消点赞）"""
+        # 转换 article_id 为 ObjectId
+        article_object_id = PydanticObjectId(article_id)
+
         # 获取文章
-        article = await Article.get(PydanticObjectId(article_id))
+        article = await Article.get(article_object_id)
         if not article:
             return {"success": False, "message": "Article not found"}
 
@@ -37,7 +40,7 @@ class LikeService:
 
         # 检查是否已点赞
         existing_like = await Like.find_one(
-            Like.article_id == article_id,
+            Like.article_id == article_object_id,
             Like.ip_address == ip_address
         )
 
@@ -53,7 +56,7 @@ class LikeService:
             }
         else:
             # 添加点赞
-            like = Like(article_id=article_id, ip_address=ip_address)
+            like = Like(article_id=article_object_id, ip_address=ip_address)
             await like.insert()
             article.like_count += 1
             await article.save()
@@ -67,8 +70,9 @@ class LikeService:
     async def check_like_status(article_id: str, request: Request) -> bool:
         """检查用户是否已点赞"""
         ip_address = LikeService.get_client_ip(request)
+        article_object_id = PydanticObjectId(article_id)
         existing_like = await Like.find_one(
-            Like.article_id == article_id,
+            Like.article_id == article_object_id,
             Like.ip_address == ip_address
         )
         return existing_like is not None

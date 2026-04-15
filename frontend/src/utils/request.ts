@@ -65,7 +65,7 @@ request.interceptors.response.use(
           ElMessage.error('Forbidden')
           break
         case 404:
-          ElMessage.error('Resource not found')
+          // Silently handle 404 - let the caller deal with it
           break
         case 500:
           ElMessage.error('Server error')

@@ -123,3 +123,23 @@ class TagService:
 
         await tag.delete()
         return True
+
+    @staticmethod
+    async def update_tag_counts(tags_to_add: List[str], tags_to_remove: List[str]):
+        """Update tag counts"""
+        # Handle tags to add
+        for tag_name in tags_to_add:
+            tag = await Tag.find_one(Tag.name == tag_name)
+            if tag:
+                tag.article_count += 1
+                await tag.save()
+            else:
+                tag = Tag(name=tag_name, article_count=1)
+                await tag.insert()
+        
+        # Handle tags to remove
+        for tag_name in tags_to_remove:
+            tag = await Tag.find_one(Tag.name == tag_name)
+            if tag:
+                tag.article_count = max(0, tag.article_count - 1)
+                await tag.save()

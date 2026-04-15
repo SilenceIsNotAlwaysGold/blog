@@ -108,7 +108,7 @@ class StatisticsService:
 
         # 获取最近浏览的文章
         recent_views = await View.find({
-            "viewed_at": {"$gte": start_date}
+            "created_at": {"$gte": start_date}
         }).to_list()
 
         # 统计每篇文章的浏览次数

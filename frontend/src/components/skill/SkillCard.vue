@@ -1,122 +1,237 @@
 <template>
   <div class="skill-card">
-    <div class="skill-header">
-      <div class="skill-icon" v-if="skill.icon">
-        <img :src="skill.icon" :alt="skill.name" />
-      </div>
-      <div class="skill-icon-placeholder" v-else>
-        <el-icon :size="32"><Tools /></el-icon>
-      </div>
-      <h3 class="skill-name">{{ skill.name }}</h3>
+    <!-- Admin -->
+    <div v-if="isAdmin" class="admin-bar" @click.stop>
+      <button class="admin-action edit" @click="handleEdit" title="编辑">
+        <el-icon><Edit /></el-icon>
+      </button>
+      <button class="admin-action delete" @click="handleDelete" title="删除">
+        <el-icon><Delete /></el-icon>
+      </button>
     </div>
 
-    <div class="skill-proficiency">
-      <div class="proficiency-label">
-        <span>Proficiency</span>
-        <span class="proficiency-value">{{ skill.proficiency }}%</span>
+    <div class="skill-top">
+      <div class="skill-icon-wrap">
+        <img v-if="skill.icon" :src="skill.icon" :alt="skill.name" class="skill-icon" />
+        <span v-else class="skill-icon-fallback">{{ skill.name.charAt(0) }}</span>
       </div>
-      <el-progress
-        :percentage="skill.proficiency"
-        :color="getProgressColor(skill.proficiency)"
-        :stroke-width="8"
-      />
+      <div class="skill-info">
+        <h3 class="skill-name">{{ skill.name }}</h3>
+        <span class="skill-level" :class="levelClass">{{ levelLabel }}</span>
+      </div>
     </div>
 
-    <p v-if="skill.description" class="skill-description">
-      {{ skill.description }}
-    </p>
+    <!-- Progress -->
+    <div class="progress-wrap">
+      <div class="progress-track">
+        <div
+          class="progress-fill"
+          :style="{ width: skill.proficiency + '%', background: progressColor }"
+        ></div>
+      </div>
+      <span class="progress-text">{{ skill.proficiency }}%</span>
+    </div>
+
+    <p v-if="skill.description" class="skill-desc">{{ skill.description }}</p>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Tools } from '@element-plus/icons-vue'
+import { computed } from 'vue'
+import { Edit, Delete } from '@element-plus/icons-vue'
 import type { Skill } from '@/api/skill'
+import { useUserStore } from '@/stores/user'
 
-defineProps<{
-  skill: Skill
-}>()
+const props = defineProps<{ skill: Skill }>()
+const emit = defineEmits<{ edit: [id: string]; delete: [id: string] }>()
 
-const getProgressColor = (proficiency: number) => {
-  if (proficiency >= 80) return '#67c23a'
-  if (proficiency >= 60) return '#409eff'
-  if (proficiency >= 40) return '#e6a23c'
-  return '#f56c6c'
-}
+const userStore = useUserStore()
+const isAdmin = computed(() => userStore.isAdmin)
+
+const progressColor = computed(() => {
+  const p = props.skill.proficiency
+  if (p >= 80) return 'linear-gradient(90deg, #10b981, #34d399)'
+  if (p >= 60) return 'linear-gradient(90deg, #3b82f6, #60a5fa)'
+  if (p >= 40) return 'linear-gradient(90deg, #f59e0b, #fbbf24)'
+  return 'linear-gradient(90deg, #ef4444, #f87171)'
+})
+
+const levelClass = computed(() => {
+  const p = props.skill.proficiency
+  if (p >= 80) return 'level-expert'
+  if (p >= 60) return 'level-proficient'
+  if (p >= 40) return 'level-intermediate'
+  return 'level-beginner'
+})
+
+const levelLabel = computed(() => {
+  const p = props.skill.proficiency
+  if (p >= 80) return '精通'
+  if (p >= 60) return '熟练'
+  if (p >= 40) return '掌握'
+  return '入门'
+})
+
+const handleEdit = () => emit('edit', props.skill.id)
+const handleDelete = () => emit('delete', props.skill.id)
 </script>
 
 <style scoped>
 .skill-card {
-  padding: 1.5rem;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
+  position: relative;
+  padding: 1.25rem;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  transition: all 0.3s ease;
 }
 
 .skill-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--accent-primary);
 }
 
-.skill-header {
+/* Admin */
+.admin-bar {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
   display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: 0.25rem;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: all 0.25s ease;
 }
 
-.skill-icon {
-  width: 48px;
-  height: 48px;
-  flex-shrink: 0;
+.skill-card:hover .admin-bar {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.skill-icon img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.skill-icon-placeholder {
-  width: 48px;
-  height: 48px;
+.admin-action {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  border: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f5f7fa;
-  border-radius: 8px;
-  color: #909399;
-  flex-shrink: 0;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: all 0.2s;
+  font-size: 0.78rem;
 }
+
+.admin-action.edit { background: rgba(99, 102, 241, 0.85); color: #fff; }
+.admin-action.edit:hover { background: rgba(99, 102, 241, 1); }
+.admin-action.delete { background: rgba(239, 68, 68, 0.85); color: #fff; }
+.admin-action.delete:hover { background: rgba(239, 68, 68, 1); }
+
+/* Top */
+.skill-top {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.skill-icon-wrap {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-tertiary);
+}
+
+.skill-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 4px;
+}
+
+.skill-icon-fallback {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent-primary);
+}
+
+.skill-info { flex: 1; min-width: 0; }
 
 .skill-name {
   margin: 0;
-  font-size: 1.25rem;
+  font-size: 1rem;
+  font-weight: 650;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.skill-level {
+  font-size: 0.68rem;
   font-weight: 600;
-  color: #303133;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
-.skill-proficiency {
-  margin-bottom: 1rem;
-}
+.level-expert { background: rgba(16, 185, 129, 0.12); color: #10b981; }
+.level-proficient { background: rgba(59, 130, 246, 0.12); color: #3b82f6; }
+.level-intermediate { background: rgba(245, 158, 11, 0.12); color: #f59e0b; }
+.level-beginner { background: rgba(239, 68, 68, 0.12); color: #ef4444; }
 
-.proficiency-label {
+/* Progress */
+.progress-wrap {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.5rem;
-  font-size: 0.9rem;
-  color: #606266;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
 }
 
-.proficiency-value {
-  font-weight: 600;
-  color: #303133;
+.progress-track {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--bg-tertiary);
+  overflow: hidden;
 }
 
-.skill-description {
+.progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.6s ease;
+}
+
+.progress-text {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  font-family: 'Consolas', monospace;
+  min-width: 2.5rem;
+  text-align: right;
+}
+
+/* Desc */
+.skill-desc {
   margin: 0;
-  font-size: 0.9rem;
-  color: #606266;
-  line-height: 1.6;
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .admin-bar { opacity: 1; transform: translateY(0); }
 }
 </style>

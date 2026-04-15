@@ -15,9 +15,15 @@ class Project(Document):
     tech_stack: List[str] = Field(default_factory=list)
     project_url: Optional[str] = None
     github_url: Optional[str] = None
+    demo_url: Optional[str] = None
     cover_image: Optional[str] = None
+    status: str = Field(default="completed")
+    highlights: List[str] = Field(default_factory=list)
+    start_date: Optional[datetime] = None
+    end_date: Optional[datetime] = None
     order: int = Field(default=0)
     created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
 
     class Settings:
         name = "projects"

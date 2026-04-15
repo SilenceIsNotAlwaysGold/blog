@@ -1,10 +1,13 @@
 """
 Database connection and initialization
 """
+import logging
 from motor.motor_asyncio import AsyncIOMotorClient
 from beanie import init_beanie
 from app.core.config import settings
 from typing import Optional
+
+logger = logging.getLogger(__name__)
 
 # Global database client
 db_client: Optional[AsyncIOMotorClient] = None
@@ -41,7 +44,7 @@ async def connect_to_database():
         ]
     )
 
-    print(f"Connected to MongoDB: {settings.MONGODB_DB_NAME}")
+    logger.info(f"Connected to MongoDB: {settings.MONGODB_DB_NAME}")
 
 
 async def close_database_connection():
@@ -49,7 +52,7 @@ async def close_database_connection():
     global db_client
     if db_client:
         db_client.close()
-        print("Closed MongoDB connection")
+        logger.info("Closed MongoDB connection")
 
 
 async def get_database():

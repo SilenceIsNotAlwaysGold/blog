@@ -1,71 +1,56 @@
 <template>
   <div class="project-card">
-    <div v-if="project.cover_image" class="project-cover">
-      <img :src="project.cover_image" :alt="project.name" />
-      <div class="project-status" :class="`status-${project.status}`">
-        {{ getStatusLabel(project.status) }}
+    <!-- Cover -->
+    <div class="card-cover">
+      <img v-if="project.cover_image" :src="project.cover_image" :alt="project.name" loading="lazy" />
+      <div v-else class="cover-placeholder">
+        <span class="placeholder-icon">{{ project.name.charAt(0) }}</span>
+      </div>
+      <div class="cover-overlay"></div>
+      <span class="status-badge" :class="'status-' + project.status">
+        {{ statusLabels[project.status] || project.status }}
+      </span>
+
+      <!-- Admin Actions -->
+      <div v-if="isAdmin" class="admin-bar" @click.stop>
+        <button class="admin-action edit" @click="handleEdit" title="编辑">
+          <el-icon><Edit /></el-icon>
+        </button>
+        <button class="admin-action delete" @click="handleDelete" title="删除">
+          <el-icon><Delete /></el-icon>
+        </button>
       </div>
     </div>
-    <div v-else class="project-cover-placeholder">
-      <el-icon :size="64"><Folder /></el-icon>
-      <div class="project-status" :class="`status-${project.status}`">
-        {{ getStatusLabel(project.status) }}
-      </div>
-    </div>
 
-    <div class="project-content">
-      <h3 class="project-name">{{ project.name }}</h3>
+    <!-- Body -->
+    <div class="card-body">
+      <h3 class="card-title">{{ project.name }}</h3>
+      <p class="card-desc">{{ project.description }}</p>
 
-      <p class="project-description">{{ project.description }}</p>
-
-      <div v-if="project.highlights && project.highlights.length > 0" class="project-highlights">
-        <div
-          v-for="(highlight, index) in project.highlights.slice(0, 3)"
-          :key="index"
-          class="highlight-item"
-        >
-          <el-icon><Check /></el-icon>
-          <span>{{ highlight }}</span>
+      <!-- Highlights -->
+      <div v-if="project.highlights?.length" class="highlights">
+        <div v-for="(h, i) in project.highlights.slice(0, 2)" :key="i" class="highlight">
+          <span class="hl-dot"></span>
+          {{ h }}
         </div>
       </div>
 
-      <div class="project-tech">
-        <el-tag
-          v-for="tech in project.tech_stack.slice(0, 5)"
-          :key="tech"
-          size="small"
-          type="info"
-        >
-          {{ tech }}
-        </el-tag>
-        <el-tag v-if="project.tech_stack.length > 5" size="small" type="info">
-          +{{ project.tech_stack.length - 5 }}
-        </el-tag>
+      <!-- Tech Stack -->
+      <div class="tech-tags">
+        <span v-for="tech in project.tech_stack.slice(0, 4)" :key="tech" class="tech-tag">{{ tech }}</span>
+        <span v-if="project.tech_stack.length > 4" class="tech-tag more">+{{ project.tech_stack.length - 4 }}</span>
       </div>
 
-      <div class="project-footer">
-        <div class="project-date" v-if="project.start_date">
-          <el-icon><Calendar /></el-icon>
-          <span>{{ formatDate(project.start_date) }}</span>
-        </div>
-
-        <div class="project-links">
-          <el-button
-            v-if="project.demo_url"
-            size="small"
-            :icon="Link"
-            @click.stop="openLink(project.demo_url)"
-          >
-            Demo
-          </el-button>
-          <el-button
-            v-if="project.github_url"
-            size="small"
-            :icon="Link"
-            @click.stop="openLink(project.github_url)"
-          >
-            GitHub
-          </el-button>
+      <!-- Footer -->
+      <div class="card-footer">
+        <span v-if="project.start_date" class="card-date">{{ formatDate(project.start_date) }}</span>
+        <div class="card-links">
+          <a v-if="project.demo_url" :href="project.demo_url" target="_blank" class="link-btn" @click.stop>
+            Demo →
+          </a>
+          <a v-if="project.github_url" :href="project.github_url" target="_blank" class="link-btn" @click.stop>
+            GitHub →
+          </a>
         </div>
       </div>
     </div>
@@ -73,170 +58,234 @@
 </template>
 
 <script setup lang="ts">
-import { Folder, Check, Calendar, Link } from '@element-plus/icons-vue'
+import { computed } from 'vue'
+import { Edit, Delete } from '@element-plus/icons-vue'
 import type { Project } from '@/api/project'
+import { useUserStore } from '@/stores/user'
 
-defineProps<{
-  project: Project
-}>()
+const props = defineProps<{ project: Project }>()
+const emit = defineEmits<{ edit: [id: string]; delete: [id: string] }>()
 
-const getStatusLabel = (status: string) => {
-  const labels: Record<string, string> = {
-    completed: 'Completed',
-    in_progress: 'In Progress',
-    planned: 'Planned'
-  }
-  return labels[status] || status
+const userStore = useUserStore()
+const isAdmin = computed(() => userStore.isAdmin)
+
+const statusLabels: Record<string, string> = {
+  completed: '已完成', in_progress: '进行中', planned: '计划中'
 }
 
 const formatDate = (dateString: string) => {
-  const date = new Date(dateString)
-  return date.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short'
-  })
+  const d = new Date(dateString)
+  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}`
 }
 
-const openLink = (url: string) => {
-  window.open(url, '_blank')
-}
+const handleEdit = () => emit('edit', props.project.id)
+const handleDelete = () => emit('delete', props.project.id)
 </script>
 
 <style scoped>
 .project-card {
-  background: #fff;
-  border-radius: 8px;
+  position: relative;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
-  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .project-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--accent-primary);
 }
 
-.project-cover {
+/* Cover */
+.card-cover {
   position: relative;
-  width: 100%;
-  height: 200px;
+  height: 180px;
   overflow: hidden;
 }
 
-.project-cover img {
+.card-cover img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s;
+  transition: transform 0.5s ease;
 }
 
-.project-card:hover .project-cover img {
-  transform: scale(1.05);
-}
+.project-card:hover .card-cover img { transform: scale(1.06); }
 
-.project-cover-placeholder {
-  position: relative;
+.cover-placeholder {
   width: 100%;
-  height: 200px;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: #fff;
+  background: var(--accent-gradient);
 }
 
-.project-status {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  padding: 0.25rem 0.75rem;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  font-weight: 600;
+.placeholder-icon {
+  font-size: 3rem;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.8);
   text-transform: uppercase;
 }
 
-.status-completed {
-  background: #67c23a;
-  color: #fff;
+.cover-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(0, 0, 0, 0.4) 100%);
 }
 
-.status-in_progress {
-  background: #409eff;
-  color: #fff;
+.status-badge {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  backdrop-filter: blur(8px);
 }
 
-.status-planned {
-  background: #e6a23c;
-  color: #fff;
+.status-completed { background: rgba(16, 185, 129, 0.85); color: #fff; }
+.status-in_progress { background: rgba(59, 130, 246, 0.85); color: #fff; }
+.status-planned { background: rgba(245, 158, 11, 0.85); color: #fff; }
+
+/* Admin */
+.admin-bar {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  display: flex;
+  gap: 0.3rem;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: all 0.25s ease;
 }
 
-.project-content {
-  padding: 1.5rem;
+.project-card:hover .admin-bar {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.project-name {
-  margin: 0 0 0.75rem 0;
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #303133;
+.admin-action {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: all 0.2s;
+  font-size: 0.85rem;
 }
 
-.project-description {
-  margin: 0 0 1rem 0;
-  font-size: 0.9rem;
-  color: #606266;
+.admin-action.edit { background: rgba(99, 102, 241, 0.85); color: #fff; }
+.admin-action.edit:hover { background: rgba(99, 102, 241, 1); }
+.admin-action.delete { background: rgba(239, 68, 68, 0.85); color: #fff; }
+.admin-action.delete:hover { background: rgba(239, 68, 68, 1); }
+
+/* Body */
+.card-body {
+  padding: 1.25rem 1.5rem 1.5rem;
+}
+
+.card-title {
+  margin: 0 0 0.4rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  transition: color 0.2s;
+}
+
+.project-card:hover .card-title { color: var(--accent-primary); }
+
+.card-desc {
+  margin: 0 0 0.75rem;
+  font-size: 0.83rem;
+  color: var(--text-secondary);
   line-height: 1.6;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-.project-highlights {
-  margin-bottom: 1rem;
-}
+/* Highlights */
+.highlights { margin-bottom: 0.75rem; }
 
-.highlight-item {
+.highlight {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
-  font-size: 0.85rem;
-  color: #606266;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  color: var(--text-tertiary);
+  margin-bottom: 0.3rem;
 }
 
-.highlight-item .el-icon {
-  color: #67c23a;
+.hl-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent-primary);
   flex-shrink: 0;
 }
 
-.project-tech {
+/* Tech */
+.tech-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  gap: 0.3rem;
+  margin-bottom: 0.75rem;
 }
 
-.project-footer {
+.tech-tag {
+  font-size: 0.7rem;
+  padding: 0.12rem 0.45rem;
+  border-radius: 4px;
+  background: var(--bg-tertiary);
+  color: var(--text-tertiary);
+  font-weight: 500;
+}
+
+.tech-tag.more {
+  background: rgba(129, 140, 248, 0.1);
+  color: var(--accent-primary);
+}
+
+/* Footer */
+.card-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 1rem;
-  border-top: 1px solid #ebeef5;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--card-border);
 }
 
-.project-date {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.85rem;
-  color: #909399;
+.card-date {
+  font-size: 0.75rem;
+  color: var(--text-disabled);
+  font-family: 'Consolas', monospace;
 }
 
-.project-links {
-  display: flex;
-  gap: 0.5rem;
+.card-links { display: flex; gap: 0.75rem; }
+
+.link-btn {
+  font-size: 0.78rem;
+  color: var(--accent-primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+
+.link-btn:hover { opacity: 0.7; }
+
+/* Mobile */
+@media (max-width: 768px) {
+  .admin-bar { opacity: 1; transform: translateY(0); }
 }
 </style>
