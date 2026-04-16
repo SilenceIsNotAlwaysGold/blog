@@ -25,11 +25,12 @@
     <div class="progress-wrap">
       <div class="progress-track">
         <div
+          ref="progressFillRef"
           class="progress-fill"
-          :style="{ width: skill.proficiency + '%', background: progressColor }"
+          :style="{ width: animatedWidth + '%', background: progressColor }"
         ></div>
       </div>
-      <span class="progress-text">{{ skill.proficiency }}%</span>
+      <span class="progress-text">{{ Math.round(animatedValue) }}%</span>
     </div>
 
     <p v-if="skill.description" class="skill-desc">{{ skill.description }}</p>
@@ -37,16 +38,51 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, onMounted, onUnmounted } from 'vue'
 import { Edit, Delete } from '@element-plus/icons-vue'
 import type { Skill } from '@/api/skill'
 import { useUserStore } from '@/stores/user'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 
 const props = defineProps<{ skill: Skill }>()
 const emit = defineEmits<{ edit: [id: string]; delete: [id: string] }>()
 
 const userStore = useUserStore()
 const isAdmin = computed(() => userStore.isAdmin)
+
+// Animated progress
+const progressFillRef = ref<HTMLElement | null>(null)
+const animatedValue = ref(0)
+const animatedWidth = ref(0)
+
+let scrollTween: gsap.core.Tween | null = null
+
+onMounted(() => {
+  if (!progressFillRef.value) return
+  const card = progressFillRef.value.closest('.skill-card')
+  if (!card) return
+
+  scrollTween = gsap.to(animatedValue, {
+    value: props.skill.proficiency,
+    duration: 1.2,
+    ease: 'power2.out',
+    scrollTrigger: {
+      trigger: card,
+      start: 'top 90%',
+      once: true,
+    },
+    onUpdate: () => {
+      animatedWidth.value = animatedValue.value
+    },
+  })
+})
+
+onUnmounted(() => {
+  scrollTween?.kill()
+})
 
 const progressColor = computed(() => {
   const p = props.skill.proficiency

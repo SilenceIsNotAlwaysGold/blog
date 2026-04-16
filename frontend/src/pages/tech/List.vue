@@ -67,15 +67,18 @@
       </div>
 
       <template v-else-if="articles.length > 0">
+        <div ref="articleListRef" class="article-list-animated">
         <ArticleCard
           v-for="article in articles"
           :key="article.id"
           :article="article"
+          class="reveal-article"
           @click="handleArticleClick"
           @edit="handleArticleEdit"
           @delete="handleArticleDelete"
         />
 
+        </div>
         <div class="pagination-wrap">
           <el-pagination
             v-model:current-page="currentPage"
@@ -99,7 +102,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { Search, Close, Plus } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -107,10 +110,32 @@ import ArticleCard from '@/components/article/ArticleCard.vue'
 import { getArticles, searchArticles, deleteArticle, type Article } from '@/api/article'
 import { getCategories, type Category } from '@/api/category'
 import { useUserStore } from '@/stores/user'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 
 const router = useRouter()
 const userStore = useUserStore()
 const isAdmin = computed(() => userStore.isAdmin)
+const articleListRef = ref<HTMLElement | null>(null)
+let gsapCtx: gsap.Context | null = null
+
+const animateArticles = () => {
+  if (!articleListRef.value) return
+  gsapCtx?.revert()
+  gsapCtx = gsap.context(() => {
+    gsap.from('.reveal-article', {
+      y: 40,
+      opacity: 0,
+      duration: 0.6,
+      stagger: 0.1,
+      ease: 'power2.out',
+    })
+  }, articleListRef.value)
+}
+
+onUnmounted(() => { gsapCtx?.revert() })
 
 interface CategoryUI extends Category { icon: string }
 
@@ -146,6 +171,8 @@ const fetchArticles = async () => {
     })
     articles.value = response.data.items
     total.value = response.data.pagination.total
+    await nextTick()
+    animateArticles()
   } catch (error: any) {
     ElMessage.error(error.message || '加载文章失败')
   } finally { loading.value = false }

@@ -71,11 +71,12 @@
 
     <!-- Projects Grid -->
     <template v-else-if="projects.length > 0">
-      <div class="projects-grid">
+      <div ref="gridRef" class="projects-grid">
         <ProjectCard
           v-for="project in projects"
           :key="project.id"
           :project="project"
+          class="reveal-project"
           @edit="handleEditProject"
           @delete="handleDeleteProject"
         />
@@ -92,13 +93,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { Plus } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import ProjectCard from '@/components/project/ProjectCard.vue'
 import { getProjects, getTechStack, deleteProject, type Project } from '@/api/project'
 import { useUserStore } from '@/stores/user'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -110,6 +115,29 @@ const techList = ref<string[]>([])
 const filterStatus = ref('')
 const filterTech = ref('')
 const error = ref(false)
+const gridRef = ref<HTMLElement | null>(null)
+let gsapCtx: gsap.Context | null = null
+
+const animateCards = () => {
+  if (!gridRef.value) return
+  gsapCtx?.revert()
+  gsapCtx = gsap.context(() => {
+    gsap.from('.reveal-project', {
+      y: 50,
+      opacity: 0,
+      duration: 0.6,
+      stagger: 0.1,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: gridRef.value!,
+        start: 'top 85%',
+        once: true,
+      },
+    })
+  }, gridRef.value)
+}
+
+onUnmounted(() => { gsapCtx?.revert() })
 
 const statusOptions = [
   { label: '已完成', value: 'completed' },
@@ -126,6 +154,8 @@ const fetchProjects = async () => {
       tech: filterTech.value || undefined
     })
     projects.value = response.data || []
+    await nextTick()
+    animateCards()
   } catch {
     error.value = true
   } finally { loading.value = false }

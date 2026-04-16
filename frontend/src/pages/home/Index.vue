@@ -4,19 +4,31 @@
     <section class="hero">
       <div class="hero-bg">
         <div class="hero-grid"></div>
-        <div class="hero-glow"></div>
+        <div ref="glowRef" class="hero-glow"></div>
+        <!-- Particles -->
+        <vue-particles
+          id="hero-particles"
+          class="hero-particles"
+          :options="particlesOptions"
+        />
       </div>
       <div class="hero-content">
         <div class="hero-badge">Developer & Creator</div>
-        <h1 class="hero-title">
-          探索 <span class="gradient-text">·</span> 创造 <span class="gradient-text">·</span> 分享
+        <h1 ref="titleRef" class="hero-title">
+          <span v-for="(word, i) in titleWords" :key="i" class="title-word">
+            <template v-if="word === '·'">
+              <span class="gradient-text">·</span>
+            </template>
+            <template v-else>{{ word }}</template>
+            {{ ' ' }}
+          </span>
         </h1>
         <p class="hero-subtitle">
           <span class="typing-text">{{ typedText }}</span>
           <span class="cursor" :class="{ typing: isTyping }">|</span>
         </p>
         <!-- 有数据时才显示统计 -->
-        <div v-if="stats.totalArticles > 0" class="hero-stats">
+        <div v-if="stats.totalArticles > 0" ref="statsRef" class="hero-stats">
           <div class="stat-card">
             <span class="stat-value">{{ stats.totalArticles }}</span>
             <span class="stat-label">篇文章</span>
@@ -42,7 +54,7 @@
     <!-- Main Content -->
     <div class="main-container" :class="{ 'has-sidebar': hasSidebarData }">
       <!-- Articles -->
-      <div class="content-area">
+      <div ref="articlesRef" class="content-area">
         <div class="section-header">
           <h2 class="section-title">
             <span class="title-accent"></span>
@@ -69,7 +81,7 @@
             <article
               v-for="(article, index) in recentArticles"
               :key="article.id"
-              class="article-card"
+              class="article-card reveal-card"
               @click="goToArticle(article)"
             >
               <div class="card-accent" :style="{ background: getAccentColor(index) }"></div>
@@ -103,8 +115,8 @@
       </div>
 
       <!-- Sidebar: 只在有数据时显示 -->
-      <aside v-if="hasSidebarData" class="sidebar">
-        <div v-if="popularArticles.length > 0" class="widget">
+      <aside v-if="hasSidebarData" ref="sidebarRef" class="sidebar">
+        <div v-if="popularArticles.length > 0" class="widget reveal-widget">
           <h3 class="widget-title">热门文章</h3>
           <div class="popular-list">
             <div
@@ -122,7 +134,7 @@
           </div>
         </div>
 
-        <div v-if="allTags.length > 0" class="widget">
+        <div v-if="allTags.length > 0" class="widget reveal-widget">
           <h3 class="widget-title">标签</h3>
           <div class="tag-cloud">
             <span
@@ -142,13 +154,27 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, nextTick, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { View, Star } from '@element-plus/icons-vue'
 import { getArticles, type Article } from '@/api/article'
 import request from '@/utils/request'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 
 const router = useRouter()
+
+// Refs
+const glowRef = ref<HTMLElement | null>(null)
+const titleRef = ref<HTMLElement | null>(null)
+const statsRef = ref<HTMLElement | null>(null)
+const articlesRef = ref<HTMLElement | null>(null)
+const sidebarRef = ref<HTMLElement | null>(null)
+
+// Title words for word-by-word animation
+const titleWords = ['探索', '·', '创造', '·', '分享']
 
 // Typing effect
 const fullText = '在代码与生活的交汇处，记录思考的轨迹'
@@ -172,6 +198,145 @@ const startTyping = () => {
   type()
 }
 
+// Particles config
+const particlesOptions = {
+  fullScreen: { enable: false },
+  fpsLimit: 60,
+  particles: {
+    number: { value: 50, density: { enable: true, area: 900 } },
+    color: { value: ['#818cf8', '#c084fc', '#f472b6', '#38bdf8'] },
+    shape: { type: 'circle' },
+    opacity: {
+      value: { min: 0.1, max: 0.5 },
+      animation: { enable: true, speed: 0.8, minimumValue: 0.1 }
+    },
+    size: {
+      value: { min: 1, max: 3 },
+      animation: { enable: true, speed: 2, minimumValue: 0.5 }
+    },
+    move: {
+      enable: true,
+      speed: 0.6,
+      direction: 'none' as const,
+      random: true,
+      straight: false,
+      outModes: { default: 'out' as const }
+    },
+    links: {
+      enable: true,
+      distance: 130,
+      color: '#818cf8',
+      opacity: 0.15,
+      width: 1
+    }
+  },
+  interactivity: {
+    events: {
+      onHover: { enable: true, mode: 'grab' },
+      resize: { enable: true }
+    },
+    modes: {
+      grab: { distance: 140, links: { opacity: 0.3 } }
+    }
+  },
+  detectRetina: true
+}
+
+// GSAP animations
+let gsapCtx: gsap.Context | null = null
+
+const initHeroAnimations = () => {
+  if (!titleRef.value) return
+
+  gsapCtx = gsap.context(() => {
+    // 1. Title words fade-in stagger
+    gsap.from('.title-word', {
+      y: 30,
+      opacity: 0,
+      duration: 0.8,
+      stagger: 0.15,
+      ease: 'power3.out',
+      delay: 0.2,
+    })
+
+    // 2. Hero badge
+    gsap.from('.hero-badge', {
+      y: -20,
+      opacity: 0,
+      duration: 0.6,
+      ease: 'power2.out',
+    })
+
+    // 3. Stats cards stagger
+    gsap.from('.stat-card', {
+      y: 20,
+      opacity: 0,
+      duration: 0.6,
+      stagger: 0.1,
+      delay: 1.2,
+      ease: 'power2.out',
+    })
+
+    // 4. Glow breathing animation
+    if (glowRef.value) {
+      gsap.to(glowRef.value, {
+        scale: 1.15,
+        opacity: 0.7,
+        duration: 4,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+      })
+      gsap.to(glowRef.value, {
+        x: 30,
+        y: -20,
+        duration: 6,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+      })
+    }
+  }, titleRef.value.parentElement!)
+}
+
+const initScrollAnimations = () => {
+  if (!articlesRef.value) return
+
+  gsap.context(() => {
+    gsap.from('.reveal-card', {
+      y: 40,
+      opacity: 0,
+      duration: 0.6,
+      stagger: 0.1,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: '.articles-grid',
+        start: 'top 85%',
+        once: true,
+      },
+    })
+  }, articlesRef.value)
+}
+
+const initSidebarAnimations = () => {
+  if (!sidebarRef.value) return
+
+  gsap.context(() => {
+    gsap.from('.reveal-widget', {
+      x: 30,
+      opacity: 0,
+      duration: 0.7,
+      stagger: 0.2,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: sidebarRef.value!,
+        start: 'top 85%',
+        once: true,
+      },
+    })
+  }, sidebarRef.value)
+}
+
 // Data
 const loadingRecent = ref(false)
 const loadingPopular = ref(false)
@@ -190,6 +355,8 @@ const fetchRecentArticles = async () => {
     stats.value.totalArticles = response.data.pagination.total
     stats.value.totalViews = recentArticles.value.reduce((s, a) => s + a.view_count, 0)
     stats.value.totalLikes = recentArticles.value.reduce((s, a) => s + a.like_count, 0)
+    await nextTick()
+    initScrollAnimations()
   } catch {
     // silent
   } finally {
@@ -218,6 +385,13 @@ const fetchTags = async () => {
   }
 }
 
+// Watch for sidebar data ready
+watch(hasSidebarData, (val) => {
+  if (val) {
+    nextTick(() => initSidebarAnimations())
+  }
+})
+
 const goToArticle = (article: Article) => router.push(`/tech/${article.id}`)
 const goToTag = (tagName: string) => router.push({ path: '/tags', query: { tag: tagName } })
 
@@ -241,10 +415,12 @@ onMounted(() => {
   fetchPopularArticles()
   fetchTags()
   startTyping()
+  nextTick(() => initHeroAnimations())
 })
 
 onUnmounted(() => {
   if (typingTimer) clearTimeout(typingTimer)
+  gsapCtx?.revert()
 })
 </script>
 
@@ -282,6 +458,13 @@ onUnmounted(() => {
   height: 600px;
   background: radial-gradient(circle, rgba(129, 140, 248, 0.2) 0%, transparent 70%);
   filter: blur(60px);
+  will-change: transform, opacity;
+}
+
+.hero-particles {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
 }
 
 .hero-content {
@@ -312,6 +495,11 @@ onUnmounted(() => {
   margin: 0 0 0.75rem;
   letter-spacing: 0.05em;
   line-height: 1.2;
+}
+
+.title-word {
+  display: inline-block;
+  will-change: transform, opacity;
 }
 
 .gradient-text {

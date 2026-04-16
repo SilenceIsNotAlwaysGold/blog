@@ -39,7 +39,7 @@
       <div
         v-for="(skills, category) in skillsGrouped"
         :key="category"
-        class="skill-group"
+        class="skill-group reveal-group"
       >
         <div class="group-header">
           <h2 class="group-title">{{ category }}</h2>
@@ -50,6 +50,7 @@
             v-for="skill in skills"
             :key="skill.id"
             :skill="skill"
+            class="reveal-skill"
             @edit="handleEditSkill"
             @delete="handleDeleteSkill"
           />
@@ -67,13 +68,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { Plus } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import SkillCard from '@/components/skill/SkillCard.vue'
 import { getSkillsGrouped, deleteSkill, type SkillsGrouped } from '@/api/skill'
 import { useUserStore } from '@/stores/user'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -82,6 +87,30 @@ const isAdmin = computed(() => userStore.isAdmin)
 const loading = ref(false)
 const skillsGrouped = ref<SkillsGrouped>({})
 const error = ref(false)
+let gsapCtx: gsap.Context | null = null
+
+const animateSkillGroups = () => {
+  const groups = document.querySelectorAll('.reveal-group')
+  if (!groups.length) return
+  gsapCtx?.revert()
+  groups.forEach((group) => {
+    const cards = group.querySelectorAll('.reveal-skill')
+    gsap.from(cards, {
+      y: 40,
+      opacity: 0,
+      duration: 0.6,
+      stagger: 0.08,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: group,
+        start: 'top 85%',
+        once: true,
+      },
+    })
+  })
+}
+
+onUnmounted(() => { gsapCtx?.revert() })
 
 const fetchSkills = async () => {
   loading.value = true
@@ -89,6 +118,8 @@ const fetchSkills = async () => {
   try {
     const response = await getSkillsGrouped()
     skillsGrouped.value = response.data || {}
+    await nextTick()
+    animateSkillGroups()
   } catch {
     error.value = true
   } finally { loading.value = false }
