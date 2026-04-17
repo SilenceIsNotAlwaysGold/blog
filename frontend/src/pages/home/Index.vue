@@ -198,25 +198,25 @@ const startTyping = () => {
   type()
 }
 
-// Particles config
+// Particles config — 更大更亮更密集
 const particlesOptions = {
   fullScreen: { enable: false },
   fpsLimit: 60,
   particles: {
-    number: { value: 50, density: { enable: true, area: 900 } },
-    color: { value: ['#818cf8', '#c084fc', '#f472b6', '#38bdf8'] },
+    number: { value: 80, density: { enable: true, area: 700 } },
+    color: { value: ['#818cf8', '#c084fc', '#f472b6', '#38bdf8', '#a78bfa'] },
     shape: { type: 'circle' },
     opacity: {
-      value: { min: 0.1, max: 0.5 },
-      animation: { enable: true, speed: 0.8, minimumValue: 0.1 }
+      value: { min: 0.2, max: 0.8 },
+      animation: { enable: true, speed: 1, minimumValue: 0.2 }
     },
     size: {
-      value: { min: 1, max: 3 },
-      animation: { enable: true, speed: 2, minimumValue: 0.5 }
+      value: { min: 1.5, max: 5 },
+      animation: { enable: true, speed: 3, minimumValue: 1 }
     },
     move: {
       enable: true,
-      speed: 0.6,
+      speed: 1,
       direction: 'none' as const,
       random: true,
       straight: false,
@@ -224,19 +224,25 @@ const particlesOptions = {
     },
     links: {
       enable: true,
-      distance: 130,
+      distance: 150,
       color: '#818cf8',
-      opacity: 0.15,
-      width: 1
+      opacity: 0.3,
+      width: 1.2
+    },
+    twinkle: {
+      particles: { enable: true, frequency: 0.03, color: { value: '#c084fc' }, opacity: 1 }
     }
   },
   interactivity: {
     events: {
-      onHover: { enable: true, mode: 'grab' },
+      onHover: { enable: true, mode: ['grab', 'bubble'] as any },
+      onClick: { enable: true, mode: 'push' },
       resize: { enable: true }
     },
     modes: {
-      grab: { distance: 140, links: { opacity: 0.3 } }
+      grab: { distance: 180, links: { opacity: 0.5 } },
+      bubble: { distance: 200, size: 8, duration: 0.4, opacity: 0.8 },
+      push: { quantity: 4 }
     }
   },
   detectRetina: true
@@ -249,48 +255,72 @@ const initHeroAnimations = () => {
   if (!titleRef.value) return
 
   gsapCtx = gsap.context(() => {
-    // 1. Title words fade-in stagger
+    // 1. Hero badge drops in from top
+    gsap.from('.hero-badge', {
+      y: -50,
+      opacity: 0,
+      scale: 0.5,
+      duration: 0.8,
+      ease: 'back.out(1.7)',
+    })
+
+    // 2. Title words fly in with dramatic stagger
     gsap.from('.title-word', {
+      y: 80,
+      opacity: 0,
+      scale: 0.3,
+      rotateX: 90,
+      duration: 1,
+      stagger: 0.2,
+      ease: 'back.out(1.5)',
+      delay: 0.3,
+    })
+
+    // 3. Subtitle fades in
+    gsap.from('.hero-subtitle', {
       y: 30,
       opacity: 0,
       duration: 0.8,
-      stagger: 0.15,
-      ease: 'power3.out',
-      delay: 0.2,
-    })
-
-    // 2. Hero badge
-    gsap.from('.hero-badge', {
-      y: -20,
-      opacity: 0,
-      duration: 0.6,
+      delay: 1.3,
       ease: 'power2.out',
     })
 
-    // 3. Stats cards stagger
+    // 4. Stats cards pop in one by one
     gsap.from('.stat-card', {
-      y: 20,
+      y: 40,
       opacity: 0,
+      scale: 0.5,
+      duration: 0.7,
+      stagger: 0.15,
+      delay: 1.6,
+      ease: 'back.out(1.7)',
+    })
+
+    // 5. Hero links pop in (when no data)
+    gsap.from('.hero-link', {
+      y: 30,
+      opacity: 0,
+      scale: 0.8,
       duration: 0.6,
       stagger: 0.1,
-      delay: 1.2,
-      ease: 'power2.out',
+      delay: 1.6,
+      ease: 'back.out(1.5)',
     })
 
-    // 4. Glow breathing animation
+    // 6. Glow breathing — 更大幅度的呼吸
     if (glowRef.value) {
       gsap.to(glowRef.value, {
-        scale: 1.15,
-        opacity: 0.7,
-        duration: 4,
+        scale: 1.4,
+        opacity: 0.9,
+        duration: 3,
         repeat: -1,
         yoyo: true,
         ease: 'sine.inOut',
       })
       gsap.to(glowRef.value, {
-        x: 30,
-        y: -20,
-        duration: 6,
+        x: 60,
+        y: -40,
+        duration: 5,
         repeat: -1,
         yoyo: true,
         ease: 'sine.inOut',
@@ -304,14 +334,16 @@ const initScrollAnimations = () => {
 
   gsap.context(() => {
     gsap.from('.reveal-card', {
-      y: 40,
+      x: -60,
+      y: 30,
       opacity: 0,
-      duration: 0.6,
-      stagger: 0.1,
-      ease: 'power2.out',
+      scale: 0.9,
+      duration: 0.7,
+      stagger: 0.12,
+      ease: 'power3.out',
       scrollTrigger: {
         trigger: '.articles-grid',
-        start: 'top 85%',
+        start: 'top 90%',
         once: true,
       },
     })
@@ -323,14 +355,15 @@ const initSidebarAnimations = () => {
 
   gsap.context(() => {
     gsap.from('.reveal-widget', {
-      x: 30,
+      x: 60,
       opacity: 0,
-      duration: 0.7,
-      stagger: 0.2,
-      ease: 'power2.out',
+      scale: 0.9,
+      duration: 0.8,
+      stagger: 0.25,
+      ease: 'power3.out',
       scrollTrigger: {
         trigger: sidebarRef.value!,
-        start: 'top 85%',
+        start: 'top 90%',
         once: true,
       },
     })
@@ -454,10 +487,10 @@ onUnmounted(() => {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(129, 140, 248, 0.2) 0%, transparent 70%);
-  filter: blur(60px);
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(129, 140, 248, 0.35) 0%, rgba(192, 132, 252, 0.15) 40%, transparent 70%);
+  filter: blur(50px);
   will-change: transform, opacity;
 }
 
@@ -495,11 +528,13 @@ onUnmounted(() => {
   margin: 0 0 0.75rem;
   letter-spacing: 0.05em;
   line-height: 1.2;
+  perspective: 600px;
 }
 
 .title-word {
   display: inline-block;
   will-change: transform, opacity;
+  transform-style: preserve-3d;
 }
 
 .gradient-text {

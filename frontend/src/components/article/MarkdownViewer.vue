@@ -22,18 +22,73 @@ const isDark = computed(() => {
   return document.documentElement.getAttribute('data-theme') === 'dark'
 })
 
+const enhanceCodeBlocks = () => {
+  if (!viewerRef.value) return
+  const pres = viewerRef.value.querySelectorAll('pre')
+  pres.forEach((pre) => {
+    if (pre.dataset.enhanced === '1') return
+    pre.dataset.enhanced = '1'
+
+    const wrapper = document.createElement('div')
+    wrapper.className = 'code-block-wrap'
+    pre.parentNode?.insertBefore(wrapper, pre)
+    wrapper.appendChild(pre)
+
+    const code = pre.querySelector('code')
+    const lang = Array.from(code?.classList || [])
+      .find((c) => c.startsWith('language-'))
+      ?.replace('language-', '') || ''
+
+    if (lang) {
+      const label = document.createElement('span')
+      label.className = 'code-lang-label'
+      label.textContent = lang
+      wrapper.appendChild(label)
+    }
+
+    const btn = document.createElement('button')
+    btn.className = 'code-copy-btn'
+    btn.type = 'button'
+    btn.setAttribute('aria-label', 'Copy code')
+    btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>复制</span>`
+
+    btn.addEventListener('click', async () => {
+      const text = code?.textContent || ''
+      try {
+        await navigator.clipboard.writeText(text)
+        btn.classList.add('copied')
+        btn.querySelector('span')!.textContent = '已复制'
+        setTimeout(() => {
+          btn.classList.remove('copied')
+          btn.querySelector('span')!.textContent = '复制'
+        }, 1800)
+      } catch {
+        btn.querySelector('span')!.textContent = '失败'
+      }
+    })
+
+    wrapper.appendChild(btn)
+  })
+}
+
 const renderMarkdown = () => {
   if (!viewerRef.value) return
 
   Vditor.preview(viewerRef.value, props.content, {
+    cdn: '/vditor',
     mode: 'light',
     theme: {
-      current: isDark.value ? 'dark' : 'classic'
+      current: isDark.value ? 'dark' : 'classic',
+      path: '/vditor/dist/css/content-theme'
     },
     hljs: {
       style: isDark.value ? 'monokai' : 'github'
+    },
+    after: () => {
+      setTimeout(enhanceCodeBlocks, 50)
     }
   })
+  setTimeout(enhanceCodeBlocks, 1500)
 }
 
 let themeObserver: MutationObserver | null = null
@@ -135,9 +190,74 @@ watch(() => props.content, () => {
   border-radius: 8px;
   padding: 1.5rem;
   overflow-x: auto;
-  margin: 1.5em 0;
+  margin: 0;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
 }
+
+/* 代码块包装器 + 复制按钮 */
+:deep(.code-block-wrap) {
+  position: relative;
+  margin: 1.5em 0;
+}
+
+:deep(.code-block-wrap:hover .code-copy-btn),
+:deep(.code-block-wrap:hover .code-lang-label) {
+  opacity: 1;
+}
+
+:deep(.code-lang-label) {
+  position: absolute;
+  top: 0.6rem;
+  left: 0.8rem;
+  padding: 0.15rem 0.55rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-tertiary);
+  background: rgba(129, 140, 248, 0.12);
+  border-radius: 4px;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+  pointer-events: none;
+  z-index: 2;
+}
+
+:deep(.code-copy-btn) {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.2s;
+  z-index: 2;
+  font-family: inherit;
+}
+
+:deep(.code-copy-btn:hover) {
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+  background: rgba(129, 140, 248, 0.08);
+}
+
+:deep(.code-copy-btn.copied) {
+  color: #10b981;
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.08);
+  opacity: 1;
+}
+
+:deep(.code-copy-btn svg) { flex-shrink: 0; }
 
 /* 行内代码 */
 :deep(.vditor-reset code) {

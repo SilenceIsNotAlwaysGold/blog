@@ -10,6 +10,7 @@ import router from './router'
 import { initPerformanceMonitoring } from './utils/performance'
 import Particles from '@tsparticles/vue3'
 import { loadSlim } from '@tsparticles/slim'
+import { vTilt } from './directives/tilt'
 
 const app = createApp(App)
 const pinia = createPinia()
@@ -22,6 +23,7 @@ app.use(Particles, {
     await loadSlim(engine)
   },
 })
+app.directive('tilt', vTilt)
 
 // 初始化性能监控
 initPerformanceMonitoring()

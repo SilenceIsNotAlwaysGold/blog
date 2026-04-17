@@ -1,5 +1,5 @@
 <template>
-  <div class="project-card">
+  <div v-tilt class="project-card" @click="handleView">
     <!-- Cover -->
     <div class="card-cover">
       <img v-if="project.cover_image" :src="project.cover_image" :alt="project.name" loading="lazy" />
@@ -7,8 +7,8 @@
         <span class="placeholder-icon">{{ project.name.charAt(0) }}</span>
       </div>
       <div class="cover-overlay"></div>
-      <span class="status-badge" :class="'status-' + project.status">
-        {{ statusLabels[project.status] || project.status }}
+      <span class="status-badge" :class="'status-' + normalizedStatus">
+        {{ statusLabels[normalizedStatus] || project.status }}
       </span>
 
       <!-- Admin Actions -->
@@ -25,7 +25,7 @@
     <!-- Body -->
     <div class="card-body">
       <h3 class="card-title">{{ project.name }}</h3>
-      <p class="card-desc">{{ project.description }}</p>
+      <p class="card-desc">{{ plainSummary }}</p>
 
       <!-- Highlights -->
       <div v-if="project.highlights?.length" class="highlights">
@@ -64,7 +64,7 @@ import type { Project } from '@/api/project'
 import { useUserStore } from '@/stores/user'
 
 const props = defineProps<{ project: Project }>()
-const emit = defineEmits<{ edit: [id: string]; delete: [id: string] }>()
+const emit = defineEmits<{ edit: [id: string]; delete: [id: string]; view: [project: Project] }>()
 
 const userStore = useUserStore()
 const isAdmin = computed(() => userStore.isAdmin)
@@ -73,6 +73,31 @@ const statusLabels: Record<string, string> = {
   completed: '已完成', in_progress: '进行中', planned: '计划中'
 }
 
+// 兼容 DB 里可能存在的历史值（active / in-progress 等）
+const normalizedStatus = computed(() => {
+  const v = (props.project.status || '').toLowerCase().replace(/-/g, '_')
+  if (v === 'active') return 'in_progress'
+  if (['completed', 'in_progress', 'planned'].includes(v)) return v
+  return 'planned'
+})
+
+// 去掉 Markdown 语法作为卡片纯文本摘要
+const plainSummary = computed(() => {
+  const raw = props.project.description || ''
+  return raw
+    .replace(/```[\s\S]*?```/g, ' ')                  // 代码块
+    .replace(/`[^`]*`/g, ' ')                         // 行内代码
+    .replace(/!\[[^\]]*]\([^)]*\)/g, ' ')             // 图片
+    .replace(/\[([^\]]+)]\([^)]*\)/g, '$1')           // 链接 → 文字
+    .replace(/^\s{0,3}#{1,6}\s+/gm, '')               // 标题井号
+    .replace(/^\s{0,3}>\s?/gm, '')                    // 引用符号
+    .replace(/^[-*+]\s+|^\d+\.\s+/gm, '')             // 列表符号
+    .replace(/[*_~]{1,3}([^*_~]+)[*_~]{1,3}/g, '$1')  // 粗体/斜体/删除线
+    .replace(/\|/g, ' ')                              // 表格
+    .replace(/\s+/g, ' ')
+    .trim()
+})
+
 const formatDate = (dateString: string) => {
   const d = new Date(dateString)
   return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}`
@@ -80,6 +105,7 @@ const formatDate = (dateString: string) => {
 
 const handleEdit = () => emit('edit', props.project.id)
 const handleDelete = () => emit('delete', props.project.id)
+const handleView = () => emit('view', props.project)
 </script>
 
 <style scoped>
@@ -90,10 +116,10 @@ const handleDelete = () => emit('delete', props.project.id)
   border-radius: 12px;
   overflow: hidden;
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .project-card:hover {
-  transform: translateY(-4px);
   box-shadow: var(--shadow-lg);
   border-color: var(--accent-primary);
 }
@@ -213,6 +239,7 @@ const handleDelete = () => emit('delete', props.project.id)
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  min-height: 2.6em;
 }
 
 /* Highlights */

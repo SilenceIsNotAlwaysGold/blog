@@ -79,6 +79,7 @@
           class="reveal-project"
           @edit="handleEditProject"
           @delete="handleDeleteProject"
+          @view="handleViewProject"
         />
       </div>
     </template>
@@ -89,16 +90,21 @@
       <p class="empty-text">暂无项目</p>
       <p class="empty-sub">精彩项目即将上线</p>
     </div>
+
+    <!-- Detail Dialog -->
+    <ProjectDetailDialog v-model="detailVisible" :project="selectedProject" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, nextTick, computed } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick, computed, defineAsyncComponent } from 'vue'
 import { useRouter } from 'vue-router'
 import { Plus } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import ProjectCard from '@/components/project/ProjectCard.vue'
 import { getProjects, getTechStack, deleteProject, type Project } from '@/api/project'
+
+const ProjectDetailDialog = defineAsyncComponent(() => import('@/components/project/ProjectDetailDialog.vue'))
 import { useUserStore } from '@/stores/user'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -123,14 +129,15 @@ const animateCards = () => {
   gsapCtx?.revert()
   gsapCtx = gsap.context(() => {
     gsap.from('.reveal-project', {
-      y: 50,
+      y: 60,
       opacity: 0,
-      duration: 0.6,
-      stagger: 0.1,
-      ease: 'power2.out',
+      scale: 0.85,
+      duration: 0.7,
+      stagger: 0.12,
+      ease: 'back.out(1.2)',
       scrollTrigger: {
         trigger: gridRef.value!,
-        start: 'top 85%',
+        start: 'top 90%',
         once: true,
       },
     })
@@ -171,6 +178,13 @@ const fetchTechStack = async () => {
 const retryFetch = () => { error.value = false; fetchProjects(); fetchTechStack() }
 const handleNewProject = () => router.push('/admin/project/new')
 const handleEditProject = (id: string) => router.push(`/admin/project/edit/${id}`)
+
+const detailVisible = ref(false)
+const selectedProject = ref<Project | null>(null)
+const handleViewProject = (p: Project) => {
+  selectedProject.value = p
+  detailVisible.value = true
+}
 
 const handleDeleteProject = async (id: string) => {
   try {

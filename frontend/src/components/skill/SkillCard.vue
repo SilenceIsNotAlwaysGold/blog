@@ -1,5 +1,5 @@
 <template>
-  <div class="skill-card">
+  <div v-tilt class="skill-card">
     <!-- Admin -->
     <div v-if="isAdmin" class="admin-bar" @click.stop>
       <button class="admin-action edit" @click="handleEdit" title="编辑">
@@ -123,7 +123,6 @@ const handleDelete = () => emit('delete', props.skill.id)
 }
 
 .skill-card:hover {
-  transform: translateY(-3px);
   box-shadow: var(--shadow-lg);
   border-color: var(--accent-primary);
 }

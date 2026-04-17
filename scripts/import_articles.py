@@ -19,7 +19,7 @@ import asyncio
 import re
 
 # MongoDB 配置
-MONGODB_URL = "mongodb://182.92.70.220:27017"
+MONGODB_URL = "mongodb://blogadmin:Xlj%40Blog2026!Secure@182.92.70.220:27017/?authSource=admin"
 DATABASE_NAME = "personal_blog"
 
 # 目录配置

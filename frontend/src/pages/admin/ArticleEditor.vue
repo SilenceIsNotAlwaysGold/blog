@@ -88,12 +88,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, defineAsyncComponent } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ArrowLeft } from '@element-plus/icons-vue'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
-import MarkdownEditor from '@/components/article/MarkdownEditor.vue'
 import { createArticle, updateArticle, getArticle, type ArticleCreate, type ArticleUpdate } from '@/api/article'
+
+const MarkdownEditor = defineAsyncComponent(() => import('@/components/article/MarkdownEditor.vue'))
 
 const route = useRoute()
 const router = useRouter()

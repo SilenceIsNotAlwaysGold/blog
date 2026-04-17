@@ -82,6 +82,7 @@ onMounted(() => {
   if (!editorRef.value) return
 
   vditor = new Vditor(editorRef.value, {
+    cdn: '/vditor',
     height: props.height,
     mode: props.mode,
     placeholder: props.placeholder,

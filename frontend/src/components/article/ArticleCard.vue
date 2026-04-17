@@ -1,5 +1,5 @@
 <template>
-  <div class="article-card" @click="handleClick">
+  <div v-tilt class="article-card" @click="handleClick">
     <div v-if="article.cover_image" class="card-cover">
       <img :src="article.cover_image" :alt="article.title" loading="lazy" />
       <div class="cover-overlay"></div>
@@ -75,7 +75,6 @@ const formatDate = (dateString: string) => {
 }
 
 .article-card:hover {
-  transform: translateY(-3px);
   box-shadow: var(--shadow-lg);
   border-color: var(--accent-primary);
 }

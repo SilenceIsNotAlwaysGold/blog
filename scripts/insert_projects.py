@@ -2,13 +2,13 @@ import asyncio
 from motor.motor_asyncio import AsyncIOMotorClient
 from beanie import init_beanie
 import sys
-sys.path.insert(0, "C:/Users/clouditera/project/xlj/backend")
+sys.path.insert(0, "/app")
 from app.models.project import Project
 from datetime import datetime
 
 
 async def main():
-    client = AsyncIOMotorClient("mongodb://182.92.70.220:27017", serverSelectionTimeoutMS=10000)
+    client = AsyncIOMotorClient("mongodb://blogadmin:Xlj%40Blog2026!Secure@182.92.70.220:27017/?authSource=admin", serverSelectionTimeoutMS=10000)
     db = client.personal_blog
     await init_beanie(database=db, document_models=[Project])
 
@@ -18,7 +18,7 @@ async def main():
     projects = [
         # === 年度总结项目 (2025) ===
         {
-            "name": "GFKD 人机协同项目",
+            "name": "人机协同智能检索项目",
             "description": "构建统一的人机协同框架，包含公网/内网漏洞自然语言语义检索系统与 Text2SQL 智能体，实现自然语言到结构化数据查询的全链路能力。覆盖 CVE、NVD、CNNVD 等来源的 30 万+条漏洞知识库。",
             "tech_stack": ["Python", "Text2SQL", "RAG", "LLM", "Docker", "YAML"],
             "status": "completed",

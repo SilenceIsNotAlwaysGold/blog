@@ -17,5 +17,19 @@ export default defineConfig({
         changeOrigin: true
       }
     }
+  },
+  build: {
+    chunkSizeWarningLimit: 1500,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-vue': ['vue', 'vue-router', 'pinia'],
+          'vendor-element-plus': ['element-plus', '@element-plus/icons-vue'],
+          'vendor-vditor': ['vditor'],
+          'vendor-gsap': ['gsap'],
+          'vendor-particles': ['@tsparticles/vue3', '@tsparticles/slim', '@tsparticles/engine']
+        }
+      }
+    }
   }
 })

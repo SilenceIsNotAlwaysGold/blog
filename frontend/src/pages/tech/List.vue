@@ -126,11 +126,13 @@ const animateArticles = () => {
   gsapCtx?.revert()
   gsapCtx = gsap.context(() => {
     gsap.from('.reveal-article', {
-      y: 40,
+      x: -50,
+      y: 30,
       opacity: 0,
-      duration: 0.6,
-      stagger: 0.1,
-      ease: 'power2.out',
+      scale: 0.9,
+      duration: 0.7,
+      stagger: 0.12,
+      ease: 'power3.out',
     })
   }, articleListRef.value)
 }

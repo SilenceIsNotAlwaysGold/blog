@@ -9,14 +9,14 @@ services:
     container_name: personal-blog-backend
     restart: unless-stopped
     environment:
-      MONGODB_URL: mongodb://182.92.70.220:27017
+      MONGODB_URL: mongodb://blogadmin:Xlj%40Blog2026!Secure@blog-mongodb:27017/?authSource=admin
       MONGODB_DB_NAME: personal_blog
-      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-xlj-blog-secret-key-2025}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-xLj$9kR!mZ2vQ8pW#4nF7bY0hT6cA3eU}
       JWT_ALGORITHM: HS256
       JWT_ACCESS_TOKEN_EXPIRE_MINUTES: "10080"
-      CORS_ORIGINS: "http://localhost,http://182.92.70.220,http://0.0.0.0"
+      CORS_ORIGINS: "https://autofish.club,https://www.autofish.club,http://localhost"
     ports:
-      - "8001:8000"
+      - "127.0.0.1:8001:8000"
     volumes:
       - ./backend/uploads:/app/uploads
     networks:
@@ -36,6 +36,9 @@ services:
     restart: unless-stopped
     ports:
       - "80:80"
+      - "443:443"
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
       - backend
     networks:

@@ -23,9 +23,7 @@
           <a href="https://github.com/SilenceIsNotAlwaysGold" target="_blank" class="profile-link">
             <span class="link-icon">G</span> GitHub
           </a>
-          <a href="mailto:xljdeyouxiang1024@163.com" class="profile-link">
-            <span class="link-icon">@</span> Email
-          </a>
+          <!-- 邮箱已隐藏 -->
         </div>
       </div>
       <div class="profile-right">
@@ -94,7 +92,7 @@
       <h3 class="section-title">教育背景</h3>
       <div class="edu-item">
         <div class="edu-header">
-          <span class="edu-school">湖南科技大学潇湘学院</span>
+          <span class="edu-school">哈尔滨理工大学</span>
           <span class="timeline-date">2016.09 - 2020.07</span>
         </div>
         <p class="edu-major">计算机科学与技术（应用技术） | 本科</p>
@@ -154,13 +152,7 @@
     <div class="info-section">
       <h3 class="section-title">联系方式</h3>
       <div class="contact-row">
-        <div class="contact-item">
-          <span class="contact-icon">@</span>
-          <div>
-            <span class="contact-label">邮箱</span>
-            <span class="contact-value">xljdeyouxiang1024@163.com</span>
-          </div>
-        </div>
+        <!-- 邮箱已隐藏 -->
         <div class="contact-item">
           <span class="contact-icon">#</span>
           <div>

@@ -62,6 +62,9 @@
         <MarkdownViewer :content="article.content" />
       </article>
 
+      <!-- Floating TOC -->
+      <ArticleToc target-selector=".article-body" :content-key="article.id" />
+
       <!-- Comments -->
       <CommentSection :article-id="(route.params.id as string)" />
 
@@ -90,13 +93,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, defineAsyncComponent } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { View, Star, Edit, Delete } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import MarkdownViewer from '@/components/article/MarkdownViewer.vue'
-import CommentSection from '@/components/comment/CommentSection.vue'
 import { getArticle, deleteArticle, type Article } from '@/api/article'
+
+const MarkdownViewer = defineAsyncComponent(() => import('@/components/article/MarkdownViewer.vue'))
+const ArticleToc = defineAsyncComponent(() => import('@/components/article/ArticleToc.vue'))
+const CommentSection = defineAsyncComponent(() => import('@/components/comment/CommentSection.vue'))
 import { toggleLike, checkLikeStatus } from '@/api/like'
 import { useUserStore } from '@/stores/user'
 
