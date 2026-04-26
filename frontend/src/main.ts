@@ -28,4 +28,11 @@ app.directive('tilt', vTilt)
 // 初始化性能监控
 initPerformanceMonitoring()
 
+// 启动时若已有 token，恢复用户信息（保证 isAdmin 等响应式状态可用）
+import { useUserStore } from './stores/user'
+const userStore = useUserStore()
+if (userStore.token) {
+  userStore.fetchUserInfo().catch(() => userStore.clearAuth())
+}
+
 app.mount('#app')

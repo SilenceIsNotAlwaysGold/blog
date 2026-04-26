@@ -1,4 +1,5 @@
 import asyncio
+import os
 from motor.motor_asyncio import AsyncIOMotorClient
 from beanie import init_beanie
 import sys
@@ -7,9 +8,16 @@ from app.models.project import Project
 from datetime import datetime
 
 
+MONGO_URL = os.getenv(
+    "MONGODB_URL",
+    "mongodb://admin:password@localhost:27017/?authSource=admin",
+)
+DB_NAME = os.getenv("MONGODB_DB_NAME", "personal_blog")
+
+
 async def main():
-    client = AsyncIOMotorClient("mongodb://blogadmin:Xlj%40Blog2026!Secure@182.92.70.220:27017/?authSource=admin", serverSelectionTimeoutMS=10000)
-    db = client.personal_blog
+    client = AsyncIOMotorClient(MONGO_URL, serverSelectionTimeoutMS=10000)
+    db = client[DB_NAME]
     await init_beanie(database=db, document_models=[Project])
 
     await Project.find().delete()

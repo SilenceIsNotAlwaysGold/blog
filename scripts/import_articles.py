@@ -19,8 +19,14 @@ import asyncio
 import re
 
 # MongoDB 配置
-MONGODB_URL = "mongodb://blogadmin:Xlj%40Blog2026!Secure@182.92.70.220:27017/?authSource=admin"
-DATABASE_NAME = "personal_blog"
+MONGODB_URL = os.getenv(
+    "MONGODB_URL",
+    "mongodb://admin:password@localhost:27017/?authSource=admin",
+)
+DATABASE_NAME = os.getenv("MONGODB_DB_NAME", "personal_blog")
+ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "change_me")
+ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", "admin@example.com")
 
 # 目录配置
 FORMATTED_DOCS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "markdown-formatted")
@@ -38,24 +44,23 @@ class BlogImporter:
 
     async def init_author(self) -> ObjectId:
         """初始化默认管理员账户"""
-        admin_user = await self.db.users.find_one({"username": "admin"})
+        admin_user = await self.db.users.find_one({"username": ADMIN_USERNAME})
 
         if not admin_user:
-            # 创建默认管理员账户
             from passlib.context import CryptContext
             pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
             admin_user = {
-                "username": "admin",
-                "email": "admin@example.com",
-                "password_hash": pwd_context.hash("admin123"),  # 默认密码，需要修改
+                "username": ADMIN_USERNAME,
+                "email": ADMIN_EMAIL,
+                "password_hash": pwd_context.hash(ADMIN_PASSWORD),
                 "role": "admin",
                 "created_at": datetime.utcnow(),
                 "updated_at": datetime.utcnow()
             }
             result = await self.db.users.insert_one(admin_user)
             admin_user["_id"] = result.inserted_id
-            print(f"✅ 创建管理员账户: admin (密码: admin123)")
+            print(f"✅ 创建管理员账户: {ADMIN_USERNAME}")
 
         return admin_user["_id"]
 

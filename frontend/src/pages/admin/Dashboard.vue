@@ -6,6 +6,7 @@
         <p class="welcome">欢迎回来，{{ userStore.userInfo?.username }}！</p>
       </div>
       <div class="header-right">
+        <el-button :icon="Link" @click="openDocs">API 文档</el-button>
         <el-button :icon="ArrowLeft" @click="router.push('/')">
           返回前台
         </el-button>
@@ -395,7 +396,7 @@ import { useRouter } from 'vue-router'
 import {
   Plus, Edit, Delete, Document, View, Star, Collection,
   Folder, PriceTag, Trophy, Briefcase,
-  ArrowLeft, Search
+  ArrowLeft, Search, Link
 } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox, type FormInstance, type FormRules } from 'element-plus'
 import { useUserStore } from '@/stores/user'
@@ -405,6 +406,7 @@ import { getSkills, deleteSkill, type Skill } from '@/api/skill'
 import { getProjects, deleteProject, type Project } from '@/api/project'
 
 const router = useRouter()
+const openDocs = () => window.open('/docs', '_blank')
 const userStore = useUserStore()
 
 // ==================== 通用状态 ====================
